@@ -6,11 +6,10 @@
 	<meta http-equiv="content-type" content="text/html; charset=UTF-8">
 	<link rel="icon" type="image/ico" href="/static/img/favicon.ico">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-	<!-- Le style -->
+  <!-- Le style -->
   <link href="static/css/bootstrap.min.css" rel="stylesheet" media="screen">
   <link href="static/css/footer.css" rel="stylesheet" media="screen">
-  <link href="static/css/style.css" rel="stylesheet" media="screen">
-  <link href="static/css/bootstrap-responsive.min.css" rel="stylesheet">
+  <!--link href="static/css/style.css" rel="stylesheet" media="screen"-->
 
   <!-- Le JS -->
   <script src="static/js/jquery-1.10.2.min.js"></script>
@@ -25,7 +24,18 @@
 </head>
 
 <body>
- 
+ <!-- Navbar -->
+ <div class="navbar">
+  <div class="navbar-inner">
+    <a class="brand" href="#">Aemon</a>
+    <ul class="nav">
+      <li class="active"><a href="#">Start</a></li>
+      <li><a href="#">About</a></li>
+      <li><a href="#">Contact</a></li>
+    </ul>
+  </div>
+</div>
+
 <!-- BODY -->	
 {% block main %}
 
@@ -51,7 +61,7 @@
      <li><a href="http://www.heroku.com/">Heroku</a></li>
      <li><a href="http://www.mongolab.com/">MongoLab</a></li>
    </ul>
-</footer>
+ </footer>
 </div>
 </div>
 </body>

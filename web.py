@@ -45,16 +45,15 @@ app.config.from_object(__name__)
 if app.debug:
 	print " * Running in debug mode"
 	import mockdb
-	col = mockdb.MockDb()
-	def get_collection():
-		return col
+	groups = mockdb.groups
+	questions = mockdb.questions
 else:
 	app.config['MONGO_DBNAME'] = db_name_from_uri(app.config['MONGO_URI'])
 	mongo = PyMongo(app)
 	if mongo:
 		print " * Connection to database established"
-		def get_collection():
-			return mongo.db.test
+		groups = mongo.db.groups
+		questions = mongo.db.questions
 
 app.jinja_env.filters['format_date'] = string_from_datetime
 app.jinja_env.filters['format_date_short'] = short_string_from_datetime
@@ -63,6 +62,15 @@ app.jinja_env.filters['format_date_short'] = short_string_from_datetime
 @app.route('/')
 def root():
     return render_template("index.html")
+
+@app.route('/start/<string:session>')
+def start(session):
+	print "Starting questionare for session", session
+	grps = 
+
+@app.route('/personal')
+def personal():
+    return render_template("personal.html")
 
 if __name__ == '__main__':
 	port = int(os.environ.get('PORT', 5000))
