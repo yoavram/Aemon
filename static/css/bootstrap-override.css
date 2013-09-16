@@ -1,0 +1,29 @@
+.form-horizontal .control-label {
+  width: 80px;
+}
+
+.form-horizontal .controls {
+  margin-right: 100px;
+}
+
+@media (max-width: 979px) {
+  .new-row-tablet {
+    width: 100% !important;
+    *width: 100% !important;
+  }
+}
+
+[rel="tooltip"] {
+  cursor: pointer;
+  display:inline-block; /* chrome-fix */
+}
+
+.link-icon {
+  color: #333333; 
+  cursor: pointer; 
+  text-decoration: none;
+}
+
+.link-icon:hover {
+  text-decoration: none;
+}
