@@ -1,5 +1,5 @@
 import os
-from flask import Flask, request, render_template, redirect, Response, url_for
+from flask import Flask, request, render_template, redirect, Response, url_for, session
 from flask.ext.pymongo import PyMongo, ObjectId
 import simplejson
 
@@ -38,9 +38,13 @@ def short_string_from_datetime(datetime_obj):
 DEBUG = os.environ.get('DEBUG', 'True') == 'True'
 MONGO_URI = os.environ.get('MONGOLAB_URI')
 GOOGLE_ANALYTICS = os.environ.get('GOOGLE_ANALYTICS', '')
+SECRET = os.environ.get('SECRET', 'A0ZXHH!jmN]LWX/,?Rr98j/3yX R~T')
+COLORS = ['','#D7191C', '#FDAE61', '#FFFFBF', '#ABD9E9', '#2C7BB6'] # 1 count (not 0 count)
 
 app = Flask(__name__)
 app.config.from_object(__name__)  
+app.secret_key = SECRET # TODO check if I can remove this
+
 
 if app.debug:
 	print " * Running in debug mode"
@@ -61,16 +65,41 @@ app.jinja_env.filters['format_date_short'] = short_string_from_datetime
 
 @app.route('/')
 def root():
+	# TODO Check session id
     return render_template("index.html")
 
-@app.route('/start/<string:session>')
-def start(session):
-	print "Starting questionare for session", session
-	grps = 
+@app.route('/start/<string:session_id>')
+def start(session_id):
+	print "Starting questionare for session", session_id
+	session['session_id'] = session_id
+	return redirect(url_for("start_questionare"))
 
-@app.route('/personal')
+@app.route('/questionare')
+def start_questionare():	
+	if 'group' in session:
+		group = groups.find_one({'name':session['group']})
+		group_num = group['order']
+	else:	
+		group_num = 1
+	return redirect(url_for("cont_questionare", group_num=group_num))
+
+@app.route('/questionare/<int:group_num>')
+def cont_questionare(group_num):
+	if 'session_id' not in session:
+		return redirect(url_for("root"))
+	if group_num > groups.count():
+		return redirect(url_for("finish"))
+	group = groups.find_one({'order':group_num})
+	qs = questions.find({'group':group['name']})
+	return render_template("questionare.html", group=group, questions=qs)
+
+@app.route('/finish')
+def finish():
+	return render_template("finish.html")
+
+@app.route('/personal', methods=['POST'])
 def personal():
-    return render_template("personal.html")
+    return "12345"
 
 if __name__ == '__main__':
 	port = int(os.environ.get('PORT', 5000))

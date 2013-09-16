@@ -1,0 +1,47 @@
+{% extends "base.html" %}
+
+{% block main %}
+<script type="text/javascript">
+	function answer(group,question,answer) {
+		//alert('group'+group.toString()+'question'+question.toString()+'answer'+answer.toString());
+		$('#q'+question.toString()).hide();
+		if (question < {{ questions | length }}) {
+			$('#q'+(question+1).toString()).show();	
+		} else {
+			$('#nextBtn').show();
+		}
+	}
+
+</script>
+
+<div class="row-fluid">
+	<div class="span8 offset1">
+		<h2>Questionare</h2>
+		<h3>{{ group.name }}</h3>
+		{{ group.title }}
+		<br>		
+		<br>
+		{% for q in questions %}
+		<div id="q{{q.order}}" {% if not loop.first %} style="display:none" {% endif %}>
+			<h4>{{ q.title }}</h4>
+			<table style="height:100px;width:500px;">
+
+				<tr>
+					{% for index in range(1,6) %}
+					<td bgcolor="{{ config.COLORS[index] }}" style="height:100px;width=100px">
+						<a href="javascript:answer({{ group.order }},{{ q.order }},{{ index }})" style="display:block;width:100%;height:100%;text-decoration:none;">&nbsp;
+						</a>
+					</td>
+					{% endfor %}
+				</tr>
+			</table>
+		</div>
+		{% endfor %}		
+		<br>
+
+		<a href="/questionare/{{ group.order + 1 }}" style='display:none' id="nextBtn"><button class="btn btn-large" style="float: right"><i class="icon-arrow-right"></i> Next</button></a>
+		<br>
+		
+	</div>
+</div>
+{% endblock main %}

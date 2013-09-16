@@ -2,7 +2,7 @@
 <div style="text-align:center">
 	<h2>Personal details</h2>
 </div>
-<form class="form-horizontal">
+<form class="form-horizontal" id="personalDetailsForm"  action="/personal" method="post">
 	<div class="control-group">
 		<div class="controls">
 
@@ -67,8 +67,20 @@
 	</div>
 	<div class="control-group">
 		<div class="controls">
-		<button type="submit" class="btn btn-primary"><i class="icon-ok icon-white"></i> Start</button>
+			<button type="submit" class="btn btn-primary"><i class="icon-ok icon-white"></i> Start</button>
 		</div>
 	</div>
 </form>
+<script type="text/javascript">
+	$(document).ready(function(){
+		$("#personalDetailsForm").submit(function() {
+	        //Do the AJAX post
+	        $.post($("#personalDetailsForm").attr("action"), $("#personalDetailsForm").serialize(), function(data){
+	            	window.location = '/start/' + data;
+	        });
+	        //Important. Stop the normal POST
+	        return false;
+    	});
+	});
+</script>
 

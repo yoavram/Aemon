@@ -67,6 +67,6 @@ questions = MockDb([
 			{'_id':ObjectId(), 'group':'Trust', 'title':'Social welfare systems', 'order':3}
 		])
 groups = MockDb([
-			{'_id':ObjectId(), 'group':'Satisfaction', 'title':'Below is a list of public institutions and organizations that deliver various services to the public. Please circle the number from 1 to 5 that best reflects your satisfaction with their services. If you are not familiar with some of the subjects below, please try to express a general impression that most closely reflects your opinion.', 'order':1},
-			{'_id':ObjectId(), 'group':'Trust', 'title':'In the following section you will find a list of various agencies and organizations. Please circle the number from 1 to 5 that best reflects the trust you have in each of them.', 'order':2}
+			{'_id':ObjectId(), 'name':'Satisfaction', 'title':'Below is a list of public institutions and organizations that deliver various services to the public. Please circle the number from 1 to 5 that best reflects your satisfaction with their services. If you are not familiar with some of the subjects below, please try to express a general impression that most closely reflects your opinion.', 'order':1},
+			{'_id':ObjectId(), 'name':'Trust', 'title':'In the following section you will find a list of various agencies and organizations. Please circle the number from 1 to 5 that best reflects the trust you have in each of them.', 'order':2}
 		])	
