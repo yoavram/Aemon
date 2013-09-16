@@ -7,22 +7,8 @@ def datetime_from_string(string):
 	return datetime.strptime(string, DATE_FORMAT)
 
 class MockDb:
-	def __init__(self):
-		self.data = [
-			{'_id':ObjectId(),'name':u'uri', 'direction':'north', 'leaving':datetime_from_string('2/12/2012'), 'arriving':datetime_from_string('3/12/2012'), 'email':'uri@gmail.co', 'munged_email': 'uri [at] gmail [dot] co', 'source':'bariloche', 'destination':'al poson', 'secret':'secret1', 'comments':u"can't wait to get going, who's in?\nlet's get started"},
-			{'_id':ObjectId(),'name':u'מיכל', 'direction':'south', 'leaving':datetime_from_string('12/12/2012'), 'arriving':datetime_from_string('17/12/2012'), 'email':'yoavram@gmail.com', 'munged_email': 'yoavram [at] gmail [dot] com', 'source':'al poson', 'destination':'bariloche', 'secret':'secret2', 'comments':u'dying to take a piss'},
-			{'_id':ObjectId(),'name':u'uri', 'direction':'north', 'leaving':datetime_from_string('2/12/2012'), 'arriving':datetime_from_string('3/12/2012'), 'email':'uri@gmail.co', 'munged_email': 'uri [at] gmail [dot] co', 'source':'bariloche', 'destination':'al poson', 'secret':'secret1', 'comments':u"can't wait to get going, who's in?\nlet's get started"},
-			{'_id':ObjectId(),'name':u'מיכל', 'direction':'south', 'leaving':datetime_from_string('12/12/2012'), 'arriving':datetime_from_string('17/12/2012'), 'email':'yoavram@gmail.com', 'munged_email': 'yoavram [at] gmail [dot] com', 'source':'al poson', 'destination':'bariloche', 'secret':'secret2', 'comments':u'dying to take a piss'},
-			{'_id':ObjectId(),'name':u'uri', 'direction':'north', 'leaving':datetime_from_string('2/12/2012'), 'arriving':datetime_from_string('3/12/2012'), 'email':'uri@gmail.co', 'munged_email': 'uri [at] gmail [dot] co', 'source':'bariloche', 'destination':'al poson', 'secret':'secret1', 'comments':u"can't wait to get going, who's in?\nlet's get started"},
-			{'_id':ObjectId(),'name':u'מיכל', 'direction':'south', 'leaving':datetime_from_string('12/12/2012'), 'arriving':datetime_from_string('17/12/2012'), 'email':'yoavram@gmail.com', 'munged_email': 'yoavram [at] gmail [dot] com', 'source':'al poson', 'destination':'bariloche', 'secret':'secret2', 'comments':u'dying to take a piss'},
-			{'_id':ObjectId(),'name':u'uri', 'direction':'north', 'leaving':datetime_from_string('2/12/2012'), 'arriving':datetime_from_string('3/12/2012'), 'email':'uri@gmail.co', 'munged_email': 'uri [at] gmail [dot] co', 'source':'bariloche', 'destination':'al poson', 'secret':'secret1', 'comments':u"can't wait to get going, who's in?\nlet's get started"},
-			{'_id':ObjectId(),'name':u'מיכל', 'direction':'south', 'leaving':datetime_from_string('12/12/2012'), 'arriving':datetime_from_string('17/12/2012'), 'email':'yoavram@gmail.com', 'munged_email': 'yoavram [at] gmail [dot] com', 'source':'al poson', 'destination':'bariloche', 'secret':'secret2', 'comments':u'dying to take a piss'},
-			{'_id':ObjectId(),'name':u'uri', 'direction':'north', 'leaving':datetime_from_string('2/12/2012'), 'arriving':datetime_from_string('3/12/2012'), 'email':'uri@gmail.co', 'munged_email': 'uri [at] gmail [dot] co', 'source':'bariloche', 'destination':'al poson', 'secret':'secret1', 'comments':u"can't wait to get going, who's in?\nlet's get started"},
-			{'_id':ObjectId(),'name':u'מיכל', 'direction':'south', 'leaving':datetime_from_string('12/12/2012'), 'arriving':datetime_from_string('17/12/2012'), 'email':'yoavram@gmail.com', 'munged_email': 'yoavram [at] gmail [dot] com', 'source':'al poson', 'destination':'bariloche', 'secret':'secret2', 'comments':u'dying to take a piss'},
-			{'_id':ObjectId(),'name':u'uri', 'direction':'north', 'leaving':datetime_from_string('2/12/2012'), 'arriving':datetime_from_string('3/12/2012'), 'email':'uri@gmail.co', 'munged_email': 'uri [at] gmail [dot] co', 'source':'bariloche', 'destination':'al poson', 'secret':'secret1', 'comments':u"can't wait to get going, who's in?\nlet's get started"},
-			{'_id':ObjectId(),'name':u'מיכל', 'direction':'south', 'leaving':datetime_from_string('12/12/2012'), 'arriving':datetime_from_string('17/12/2012'), 'email':'yoavram@gmail.com', 'munged_email': 'yoavram [at] gmail [dot] com', 'source':'al poson', 'destination':'bariloche', 'secret':'secret2', 'comments':u'dying to take a piss'}
-		]
-
+	def __init__(self, data):
+		self.data = data
 
 	def insert(self, post):
 		_id = ObjectId()
@@ -71,3 +57,16 @@ class MockDb:
 		for x in self.data:
 			if x['_id'] == _id:
 				return self.data.remove(x)
+
+questions = MockDb([
+			{'_id':ObjectId(), 'group':'Satisfaction', 'title':'Public health systems', 'order':1},
+			{'_id':ObjectId(), 'group':'Satisfaction', 'title':'Agencies of internal security', 'order':2},
+			{'_id':ObjectId(), 'group':'Satisfaction', 'title':'Social welfare systems', 'order':3},
+			{'_id':ObjectId(), 'group':'Trust', 'title':'Public health systems', 'order':1},
+			{'_id':ObjectId(), 'group':'Trust', 'title':'Agencies of internal security', 'order':2},
+			{'_id':ObjectId(), 'group':'Trust', 'title':'Social welfare systems', 'order':3}
+		])
+groups = MockDb([
+			{'_id':ObjectId(), 'group':'Satisfaction', 'title':'Below is a list of public institutions and organizations that deliver various services to the public. Please circle the number from 1 to 5 that best reflects your satisfaction with their services. If you are not familiar with some of the subjects below, please try to express a general impression that most closely reflects your opinion.', 'order':1},
+			{'_id':ObjectId(), 'group':'Trust', 'title':'In the following section you will find a list of various agencies and organizations. Please circle the number from 1 to 5 that best reflects the trust you have in each of them.', 'order':2}
+		])	
