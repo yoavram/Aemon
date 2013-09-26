@@ -59,6 +59,8 @@ else:
 		groups = mongo.db.groups
 		questions = mongo.db.questions
 
+app.config['num_groups'] = groups.count()
+app.config['num_questions'] = questions.count()
 app.jinja_env.filters['format_date'] = string_from_datetime
 app.jinja_env.filters['format_date_short'] = short_string_from_datetime
 
@@ -72,7 +74,14 @@ def root():
 def start(session_id):
 	print "Starting questionare for session", session_id
 	session['session_id'] = session_id
+	session['progress'] = 0
 	return redirect(url_for("start_questionare"))
+
+@app.route('/answer/<int:que>/<int:ans>')
+def answer(que,ans):
+	print "Question",que,"Answer",ans
+	session['progress'] += 1
+	return "OK"
 
 @app.route('/questionare')
 def start_questionare():	
@@ -102,6 +111,6 @@ def personal():
     return "12345"
 
 if __name__ == '__main__':
-	port = int(os.environ.get('PORT', 5000))
+	port = int(os.environ.get('PORT', 5005))
 	app.run(host='0.0.0.0', port=port, debug=app.debug)	
 	print "Finished"
