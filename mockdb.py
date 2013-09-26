@@ -59,7 +59,7 @@ class MockDb:
 				return self.data.remove(x)
 
 questions = MockDb([
-			{'_id':ObjectId(), 'group':'Satisfaction', 'title':'Public health systems', 'order':1},
+			{'_id':ObjectId(), 'group':'Satisfaction', 'title':'Public health systems', 'order':1, 'comments':['Very dissatisfied','','','','Very satisfied']},
 			{'_id':ObjectId(), 'group':'Satisfaction', 'title':'Agencies of internal security', 'order':2},
 			{'_id':ObjectId(), 'group':'Satisfaction', 'title':'Social welfare systems', 'order':3},
 			{'_id':ObjectId(), 'group':'Trust', 'title':'Public health systems', 'order':1},
