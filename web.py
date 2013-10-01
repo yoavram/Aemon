@@ -2,6 +2,7 @@ import os
 from flask import Flask, request, render_template, redirect, Response, url_for, session
 from flask.ext.pymongo import PyMongo, ObjectId
 import simplejson
+from passlib.apps import custom_app_context as pwd_context
 
 DATE_FORMAT = "%d/%m/%Y"
 SHORT_DATE_FORMAT = "%d/%m/%y"
@@ -39,6 +40,7 @@ DEBUG = os.environ.get('DEBUG', 'True') == 'True'
 MONGO_URI = os.environ.get('MONGOLAB_URI')
 GOOGLE_ANALYTICS = os.environ.get('GOOGLE_ANALYTICS', '')
 SECRET = os.environ.get('SECRET', 'A0ZXHH!jmN]LWX/,?Rr98j/3yX R~T')
+ADMIN_PW = os.environ.get('ADMIN_PW', '$5$rounds=87555$a5NNYH4VQvtM6XAX$lVAxzku5ovvu82HZA2nkBcdAfEGkRHzHDkuw2MXsvJ1')
 COLORS = ['','#D7191C', '#FDAE61', '#FFFFBF', '#ABD9E9', '#2C7BB6'] # 1 count (not 0 count)
 
 app = Flask(__name__)
@@ -63,7 +65,6 @@ app.config['num_groups'] = groups.count()
 app.config['num_questions'] = questions.count()
 app.jinja_env.filters['format_date'] = string_from_datetime
 app.jinja_env.filters['format_date_short'] = short_string_from_datetime
-
 
 @app.route('/')
 def root():
@@ -109,6 +110,22 @@ def finish():
 @app.route('/personal', methods=['POST'])
 def personal():
     return "12345"
+
+@app.route('/admin', methods=['GET','POST'])
+def admin():
+	if request.method == 'POST':
+		pw = request.form['password']		
+		if pwd_context.verify(pw, ADMIN_PW):
+			return redirect("/admin/groups")
+		else:
+			return render_template("login.html", failed=True)	
+	else:
+		return render_template("login.html", failed=False)
+
+@app.route('/admin/groups'):
+	if not session.get('admin', False):
+		redirect('/admin')
+	return "hi"
 
 if __name__ == '__main__':
 	port = int(os.environ.get('PORT', 5005))

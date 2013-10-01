@@ -1,0 +1,19 @@
+{% extends "base.html" %}
+
+{% block main %}
+
+<div class="row-fluid">
+	<div class="span6 offset1">
+		<h3>Please enter admin password:</h3>
+		{% if failed %}
+		<div class="alert alert-error">		  
+		  <strong>Failed:</strong> wrong password!
+		</div>
+		{% endif %}
+		<form class="form-inline" method="POST" action="/admin">			
+			<input name="password" type="password" class="input-small" placeholder="Password">			
+			<button type="submit" class="btn">Login</button>
+		</form>
+	</div>
+</div>
+{% endblock %}
