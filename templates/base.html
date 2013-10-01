@@ -34,6 +34,11 @@
       <li><a href="/start/{{ session.session_id }}">Questionare</a></li>
       <li><a href="#">About</a></li>
       <li><a href="#">Contact</a></li>
+      {% if session['admin'] %}
+      <li><a href="/logout">Logout</a></li>      
+      {% else %}
+      <li><a href="/admin">Admin</a></li>
+      {% endif %}
     </ul>
   </div>
 </div>

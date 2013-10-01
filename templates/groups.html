@@ -1,0 +1,25 @@
+{% extends "base.html" %}
+
+{% block main %}
+<div class="row-fluid">
+	<div class="span6 offset1">
+		<h3>Groups</h3>
+		<table class="table table-striped">
+		<tr>
+		<td>Name</td>
+		<td>Title</td>
+		<td>Order</td>		
+		{% for g in groups %}
+		<tr>
+		<td><a href="/admin/group/{{g.name}}">{{g.name}}</a></td>
+		<td>{{g.title}}</td>
+		<td>{{g.order}}</td>
+		</tr>
+		{% endfor %}
+		<tr>
+		<td colspan="3"><a href="/admin/group/all">All questions</a></td>
+		</table>
+	</div>
+</div>
+
+{% endblock %}

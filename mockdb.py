@@ -30,7 +30,7 @@ class MockDb:
 					data.append(d)
 			return data
 		else:
-			return self
+			return self.data
 
 
 	def find_one(self, spec=None, sort=None):

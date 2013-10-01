@@ -116,16 +116,48 @@ def admin():
 	if request.method == 'POST':
 		pw = request.form['password']		
 		if pwd_context.verify(pw, ADMIN_PW):
+			session['admin'] = True
 			return redirect("/admin/groups")
 		else:
 			return render_template("login.html", failed=True)	
 	else:
-		return render_template("login.html", failed=False)
+		if not session.get('admin', False):
+				return render_template("login.html", failed=False)
+		else:
+			return redirect('/admin/groups')
 
-@app.route('/admin/groups'):
+@app.route('/logout')
+def logout():
+	session['admin'] = False
+	return redirect('/')
+
+@app.route('/admin/groups')
+def groups_view():
 	if not session.get('admin', False):
 		redirect('/admin')
-	return "hi"
+	return render_template('groups.html', groups=groups.find())
+
+@app.route('/admin/group/<string:group>')
+def group_view(group):
+	if not session.get('admin', False):
+		redirect('/admin')
+	if group=='all':
+		qs = questions.find()
+	else:
+		qs = questions.find({'group':group})
+	print "qs",qs
+	return render_template('questions.html', questions=qs)	
+
+@app.route('/admin/question/<string:question>')
+def question_view(question):
+	if not session.get('admin', False):
+		redirect('/admin')
+	if question == "new":
+		q = {'title':'new'}
+	else:
+		q = questions.find_one({'_id':ObjectId(question)})
+	return render_template('edit_question.html', question=q)	
+
 
 if __name__ == '__main__':
 	port = int(os.environ.get('PORT', 5005))
