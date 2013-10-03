@@ -3,6 +3,7 @@ from flask import Flask, request, render_template, redirect, Response, url_for, 
 from flask.ext.pymongo import PyMongo, ObjectId
 import simplejson
 from passlib.apps import custom_app_context as pwd_context
+from datetime import datetime
 
 DATE_FORMAT = "%d/%m/%Y"
 SHORT_DATE_FORMAT = "%d/%m/%y"
@@ -144,19 +145,42 @@ def group_view(group):
 	if group=='all':
 		qs = questions.find()
 	else:
-		qs = questions.find({'group':group})
-	print "qs",qs
+		qs = questions.find({'group':group})	
 	return render_template('questions.html', questions=qs)	
 
-@app.route('/admin/question/<string:question>')
-def question_view(question):
+
+@app.route('/admin/question/<string:question_id>/edit', methods=['POST','GET'])
+def edit_question(question_id):
 	if not session.get('admin', False):
 		redirect('/admin')
-	if question == "new":
-		q = {'title':'new'}
-	else:
-		q = questions.find_one({'_id':ObjectId(question)})
-	return render_template('edit_question.html', question=q)	
+	if request.method == 'GET':
+		q = questions.find_one({'_id':ObjectId(question_id)})
+		if q==None:
+			# TODO react to failure in ui
+			return jsonify(error="not found")
+		else:
+			return jsonify(result=q)
+	elif request.method == 'POST':
+		q = questions.find_one({'_id':ObjectId(question_id)})
+		print 'keys', request.form.keys()
+		for k in q.keys():
+			print 'k',k
+			if k in request.form:
+				q[k] = request.form[k]
+		success = questions.update(q) #TODO check this returns bool
+		return jsonify(result=success)
+
+@app.route('/admin/question/add')
+def add_question():
+	return "not implemented"
+		
+@app.route('/admin/question/<string:question_id>/remove')
+def remove_question(question_id):
+	if not session.get('admin', False):
+		redirect('/admin')	
+	success = questions.remove({'_id':ObjectId(question_id)})
+	return jsonify(result=success)
+	
 
 
 if __name__ == '__main__':

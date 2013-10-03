@@ -16,7 +16,9 @@
   <script src="/static/js/jquery-1.10.2.min.js"></script>
   <script src="/static/js/bootstrap.min.js"></script>
   <script src="/static/js/jquery-ui.js"></script>
-
+  <script type="text/javascript">
+    $SCRIPT_ROOT = {{ request.script_root|tojson|safe }};
+  </script>
   <!-- HTML5 shim, for IE6-8 support of HTML5 elements -->
   <!--[if lt IE 9]>
   <script src="http://html5shim.googlecode.com/svn/trunk/html5.js"></script>
@@ -34,10 +36,9 @@
       <li><a href="/start/{{ session.session_id }}">Questionare</a></li>
       <li><a href="#">About</a></li>
       <li><a href="#">Contact</a></li>
+      <li><a href="/admin">Admin</a></li>
       {% if session['admin'] %}
       <li><a href="/logout">Logout</a></li>      
-      {% else %}
-      <li><a href="/admin">Admin</a></li>
       {% endif %}
     </ul>
   </div>
@@ -67,6 +68,10 @@
      <li>|</li>
      <li><a href="http://www.heroku.com/">Heroku</a></li>
      <li><a href="http://www.mongolab.com/">MongoLab</a></li>
+     <br>
+     {% if session['session_id'] %}
+      {{ session['session_id'] }}
+     {% endif %}
    </ul>
  </footer>
 </div>

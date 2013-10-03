@@ -16,6 +16,15 @@ class MockDb:
 		self.data.append(post)
 		return _id
 
+	def update(self, post):
+		_id = post['_id']
+		if type(_id) == str:
+			_id = ObjectId(_id)
+		for p in self.data:
+			if p['_id'] == _id:
+				p.update(post)
+				return True
+		return False
 
 	def find(self, spec=None, sort=None):
 		if spec:
@@ -53,10 +62,12 @@ class MockDb:
 		return len(self.data)
 
 
-	def remove(self, _id):
-		for x in self.data:
-			if x['_id'] == _id:
-				return self.data.remove(x)
+	def remove(self, spec):		
+		for x in self.data:			
+			if x['_id'] == spec['_id']:
+				y = self.data.remove(x)
+				return True
+		return False
 
 questions = MockDb([
 			{'_id':ObjectId(), 'group':'Satisfaction', 'title':'Public health systems', 'order':1, 'comments':['Very dissatisfied','','','','Very satisfied']},
