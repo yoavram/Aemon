@@ -1,6 +1,6 @@
 import os
 from flask import Flask, request, render_template, redirect, Response, url_for, session
-from flask.ext.pymongo import PyMongo, ObjectId
+from flask.ext.pymongo import PyMongo, ObjectId, InvalidId
 import simplejson
 from passlib.apps import custom_app_context as pwd_context
 from datetime import datetime
@@ -114,67 +114,48 @@ def personal():
 
 @app.route('/admin', methods=['GET','POST'])
 def admin():
+	# POST
 	if request.method == 'POST':
 		pw = request.form['password']		
-		if pwd_context.verify(pw, ADMIN_PW):
-			session['admin'] = True
-			return redirect("/admin/groups")
-		else:
-			return render_template("login.html", failed=True)	
-	else:
-		if not session.get('admin', False):
-				return render_template("login.html", failed=False)
-		else:
-			return redirect('/admin/groups')
+		if not pwd_context.verify(pw, ADMIN_PW):
+			return render_template("login.html", failed=True)
+		session['admin'] = True	
+	# GET 
+	elif not session.get('admin', False): 
+			return render_template("login.html", failed=False)		
+	return render_template('questions.html')
 
 @app.route('/logout')
 def logout():
 	session['admin'] = False
 	return redirect('/')
 
-@app.route('/admin/groups')
-def groups_view():
+@app.route('/admin/questions')
+def get_questions():
 	if not session.get('admin', False):
 		redirect('/admin')
-	return render_template('groups.html', groups=groups.find())
+	return jsonify(result=questions.find())
 
-@app.route('/admin/group/<string:group>')
-def group_view(group):
+@app.route('/admin/question/save', methods=['POST'])
+def save_question():
 	if not session.get('admin', False):
 		redirect('/admin')
-	if group=='all':
-		qs = questions.find()
-	else:
-		qs = questions.find({'group':group})	
-	return render_template('questions.html', questions=qs)	
-
-
-@app.route('/admin/question/<string:question_id>/edit', methods=['POST','GET'])
-def edit_question(question_id):
-	if not session.get('admin', False):
-		redirect('/admin')
-	if request.method == 'GET':
-		q = questions.find_one({'_id':ObjectId(question_id)})
-		if q==None:
-			# TODO react to failure in ui
-			return jsonify(error="not found")
-		else:
-			return jsonify(result=q)
-	elif request.method == 'POST':
-		q = questions.find_one({'_id':ObjectId(question_id)})
-		print 'keys', request.form.keys()
-		for k in q.keys():
-			print 'k',k
-			if k in request.form:
-				q[k] = request.form[k]
-		success = questions.update(q) #TODO check this returns bool
+	if request.method == 'POST':
+		_id = request.form.get('_id')		
+		try:
+			q = questions.find_one({'_id':ObjectId(_id)})
+			for k in q.keys():
+				if k in request.form:
+					q[k] = request.form[k]
+			success = questions.update(q) #TODO check this returns bool
+		except InvalidId: # New question
+			q = {}
+			for k,v in request.form.items():
+					q[k] = v
+			success = questions.insert(q) #TODO check this returns bool
 		return jsonify(result=success)
-
-@app.route('/admin/question/add')
-def add_question():
-	return "not implemented"
 		
-@app.route('/admin/question/<string:question_id>/remove')
+@app.route('/admin/question/remove/<string:question_id>')
 def remove_question(question_id):
 	if not session.get('admin', False):
 		redirect('/admin')	

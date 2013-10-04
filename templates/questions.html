@@ -1,0 +1,116 @@
+{% extends "base.html" %}
+
+{% block main %}
+<script type="text/javascript">
+	
+	function edit(_id) {
+		$("#view_"+_id).hide();
+		$("#edit_"+_id).show();
+	}
+
+	function cancel(_id) {
+		$("#edit_"+_id).hide();
+		$("#view_"+_id).show();
+	}
+
+	function save(_id) {
+		$.post($SCRIPT_ROOT + '/admin/question/save', {
+			_id: _id,
+			title: $('input[name='+_id+'_title]').val(),
+			group: $('input[name='+_id+'_group]').val(),
+			order: $('input[name='+_id+'_order]').val()
+		}, function(data) {location.reload();});		
+	}
+
+	function remove(_id) {
+		$.get($SCRIPT_ROOT + '/admin/question/remove/'+_id, 
+			function(data) {location.reload();});		
+	}
+
+	function add() {
+		var _id = Math.floor(Math.random()*1000);
+		q = {'_id':_id,'title':'','order':'','group':''}
+		make_edit_tr(q);
+		edit(_id);
+	}
+
+	function get_questions(group) {
+		var url = $SCRIPT_ROOT + '/admin/questions';
+		if (group) {
+			url += '/' + group;
+		}
+		$.get(url,
+			function(data) {			
+				_.each(data.result, function(q) {
+					make_view_tr(q);
+					make_edit_tr(q);
+				});				
+			});
+	}
+
+	function make_view_tr(q) {
+		var view_tr = template_view_tr(q);
+		$('#questions_table > tbody:last').append(view_tr);
+		$('#'+q._id+'_edit').click(function() {edit(q._id);});		
+		$('#'+q._id+'_remove').click(function() {remove(q._id);});
+	}
+
+	function make_edit_tr(q) {
+		var edit_tr = template_edit_tr(q);		
+		$('#questions_table > tbody:last').append(edit_tr);
+		$('#'+q._id+'_save').click(function() {save(q._id);});		
+		$('#'+q._id+'_cancel').click(function() {cancel(q._id);});		
+	}
+
+	var template_view_tr = _.template(' \
+			<tr id="view_<%= _id %>"> \
+				<td><a href="#" id="<%= _id %>_edit">edit</a></td> \
+				<td><a href="#"id="<%= _id %>_remove">remove</a></td> \
+				<td><%= title %></td> \
+				<td><%= group %></td> \
+				<td><%= order %></td> \
+				<td>...</td> \
+			</tr>');
+
+	 var template_edit_tr = _.template(' \
+			<tr id="edit_<%= _id %>" style="display:none"> \
+				<form> \
+					<td><a href="#" id="<%= _id %>_save">save</a></td> \
+					<td><a href="#" id="<%= _id %>_cancel">cancel</a></td> \
+					<td><input type="text" name="<%= _id %>_title" value="<%= title %>"></td> \
+					<td><input type="text" name="<%= _id %>_group" value="<%= group %>"></td> \
+					<td><input type="text" name="<%= _id %>_order" class="input-small" value="<%= order %>"></td> \
+					<td>...</td> \
+				</form> \
+			</tr>');
+
+	$( document ).ready( function() {
+		get_questions('{{ group }}');		
+		$('#add_btn').click(add);
+	})
+</script>
+
+<div class="row-fluid">
+	<div class="span6 offset1">
+		<div id="result">
+		</div>
+		<h3>Questions</h3>
+		<table id="questions_table" class="table table-striped">
+			<tr>		
+				<th colspan="2"></th>
+				<th>Title</th>
+				<th>Group</th>
+				<th>Order</th>
+				<th>Comments</th>	
+			</tr>			
+		</table>		
+		<a href="#" id="add_btn">
+			<button type="button" class="btn">Add</button>
+		</a>
+		<a href="/admin/groups">
+			<button type="button" class="btn btn-inverse">Groups</button>
+		</a>
+	</div>
+</div>
+
+{% endblock %}
