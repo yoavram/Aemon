@@ -34,11 +34,8 @@
 		edit(_id);
 	}
 
-	function get_questions(group) {
-		var url = $SCRIPT_ROOT + '/admin/questions';
-		if (group) {
-			url += '/' + group;
-		}
+	function get_questions() {
+		var url = $SCRIPT_ROOT + '/admin/questions';		
 		$.get(url,
 			function(data) {			
 				_.each(data.result, function(q) {
