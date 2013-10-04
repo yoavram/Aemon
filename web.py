@@ -52,9 +52,7 @@ app.secret_key = SECRET # TODO check if I can remove this
 
 if app.debug:
 	print " * Running in debug mode"
-	import mockdb
-	groups = mockdb.groups
-	questions = mockdb.questions
+	from mockdb import groups, questions, answers
 else:
 	app.config['MONGO_DBNAME'] = db_name_from_uri(app.config['MONGO_URI'])
 	mongo = PyMongo(app)
@@ -62,6 +60,7 @@ else:
 		print " * Connection to database established"
 		groups = mongo.db.groups
 		questions = mongo.db.questions
+		answers = mongo.db.answers
 
 app.permanent_session_lifetime = timedelta(days=3)
 app.config['num_groups'] = groups.count()
@@ -83,9 +82,10 @@ def start(session_id):
 
 @app.route('/answer/<int:que>/<int:ans>')
 def answer(que,ans):
-	print "Question",que,"Answer",ans
+	data = {"session_id":session["session_id"], "question":que,"answer":ans}
+	success = answers.insert(data)
 	session['progress'] += 1
-	return "OK"
+	return jsonify(result=success)
 
 @app.route('/questionare')
 def start_questionare():	
@@ -155,7 +155,13 @@ def view_questions(group=''):
 		return jsonify(result=qs)
 	else:
 		return render_template("questions.html",group=group)
-	
+
+@app.route('/admin/answers')
+def view_answers():
+	if not session.get('admin', False):
+		redirect('/admin')
+	#if request.is_xhr:
+	return jsonify(result=answers.find())
 
 @app.route('/admin/question/save', methods=['POST'])
 def save_question():
