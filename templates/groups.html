@@ -1,24 +1,115 @@
 {% extends "base.html" %}
 
 {% block main %}
+<script type="text/javascript">
+	
+	function edit(_id) {
+		$("#view_"+_id).hide();
+		$("#edit_"+_id).show();
+	}
+
+	function cancel(_id) {
+		$("#edit_"+_id).hide();
+		$("#view_"+_id).show();
+	}
+
+	function save(_id) {
+		$.post($SCRIPT_ROOT + '/admin/group/save', {
+			_id: _id,
+			title: $('input[name='+_id+'_title]').val(),
+			name: $('input[name='+_id+'_name]').val(),
+			order: $('input[name='+_id+'_order]').val()
+		}, function(data) {location.reload();});		
+	}
+
+	function remove(_id) {
+		$.get($SCRIPT_ROOT + '/admin/group/remove/'+_id, 
+			function(data) {location.reload();});		
+	}
+
+	function add() {
+		var _id = Math.floor(Math.random()*1000);
+		g = {'_id':_id,'title':'','order':'','name':''}
+		make_edit_tr(g);
+		edit(_id);
+	}
+
+	function get_groups() {
+		var url = $SCRIPT_ROOT + '/admin/groups';		
+		$.get(url,
+			function(data) {				
+				_.each(data.result, function(g) {
+					make_view_tr(g);
+					make_edit_tr(g);
+				});				
+			});
+	}
+
+	function make_view_tr(g) {
+		var view_tr = template_view_tr(g);
+		$('#groups_table > tbody:last').append(view_tr);
+		$('#'+g._id+'_edit').click(function() {edit(g._id);});		
+		$('#'+g._id+'_remove').click(function() {remove(g._id);});
+	}
+
+	function make_edit_tr(g) {
+		var edit_tr = template_edit_tr(g);		
+		$('#groups_table > tbody:last').append(edit_tr);
+		$('#'+g._id+'_save').click(function() {save(g._id);});		
+		$('#'+g._id+'_cancel').click(function() {cancel(g._id);});		
+	}
+
+	var template_view_tr = _.template(' \
+		<tr id="view_<%= _id %>"> \
+			<td><a href="#" id="<%= _id %>_edit">edit</a></td> \
+			<td><a href="#"id="<%= _id %>_remove">remove</a></td> \
+			<td><a href="/admin/questions/<%= name %>"><%= name %></a></td> \
+			<td><%= title %></td> \
+			<td><%= order %></td> \
+			<td>...</td> \
+		</tr>');
+
+	var template_edit_tr = _.template(' \
+		<tr id="edit_<%= _id %>" style="display:none"> \
+			<form> \
+				<td><a href="#" id="<%= _id %>_save">save</a></td> \
+				<td><a href="#" id="<%= _id %>_cancel">cancel</a></td> \
+				<td><input type="text" name="<%= _id %>_name" value="<%= name %>"></td> \
+				<td><input type="text" name="<%= _id %>_title" value="<%= title %>"></td> \
+				<td><input type="text" name="<%= _id %>_order" class="input-small" value="<%= order %>"></td> \
+				<td>...</td> \
+			</form> \
+		</tr>');
+
+	$( document ).ready( function() {
+		get_groups();		
+		$('#add_btn').click(add);
+	});
+</script>
+
 <div class="row-fluid">
 	<div class="span6 offset1">
-		<h3>Groups</h3>
-		<table class="table table-striped">
-		<tr>
-		<td>Name</td>
-		<td>Title</td>
-		<td>Order</td>		
-		{% for g in groups %}
-		<tr>
-		<td><a href="/admin/group/{{g.name}}">{{g.name}}</a></td>
-		<td>{{g.title}}</td>
-		<td>{{g.order}}</td>
-		</tr>
-		{% endfor %}
-		<tr>
-		<td colspan="3"><a href="/admin/group/all">All questions</a></td>
-		</table>
+		<h3>
+			Groups
+			<div class="btn-group" style="float:right">
+				<a href="#" class="btn" id="add_btn">
+					Add Group
+				</a>		
+				<a href="/admin/groups"class="btn">
+					Go to Questions
+				</a>
+			</div>
+		</h3>
+		
+		<table id="groups_table" class="table table-striped">
+			<tr>		
+				<th colspan="2"></th>
+				<th>Name</th>
+				<th>Title</th>
+				<th>Order</th>
+				<th>Comments</th>	
+			</tr>			
+		</table>		
 	</div>
 </div>
 

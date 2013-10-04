@@ -35,7 +35,7 @@
 	}
 
 	function get_questions() {
-		var url = $SCRIPT_ROOT + '/admin/questions';		
+		var url = $SCRIPT_ROOT + '/admin/questions/{{group}}';		
 		$.get(url,
 			function(data) {			
 				_.each(data.result, function(q) {
@@ -60,38 +60,49 @@
 	}
 
 	var template_view_tr = _.template(' \
-			<tr id="view_<%= _id %>"> \
-				<td><a href="#" id="<%= _id %>_edit">edit</a></td> \
-				<td><a href="#"id="<%= _id %>_remove">remove</a></td> \
-				<td><%= title %></td> \
-				<td><%= group %></td> \
-				<td><%= order %></td> \
-				<td>...</td> \
-			</tr>');
+		<tr id="view_<%= _id %>"> \
+			<td><a href="#" id="<%= _id %>_edit">edit</a></td> \
+			<td><a href="#"id="<%= _id %>_remove">remove</a></td> \
+			<td><%= title %></td> \
+			<td><%= group %></td> \
+			<td><%= order %></td> \
+			<td>...</td> \
+		</tr>');
 
-	 var template_edit_tr = _.template(' \
-			<tr id="edit_<%= _id %>" style="display:none"> \
-				<form> \
-					<td><a href="#" id="<%= _id %>_save">save</a></td> \
-					<td><a href="#" id="<%= _id %>_cancel">cancel</a></td> \
-					<td><input type="text" name="<%= _id %>_title" value="<%= title %>"></td> \
-					<td><input type="text" name="<%= _id %>_group" value="<%= group %>"></td> \
-					<td><input type="text" name="<%= _id %>_order" class="input-small" value="<%= order %>"></td> \
-					<td>...</td> \
-				</form> \
-			</tr>');
+	var template_edit_tr = _.template(' \
+		<tr id="edit_<%= _id %>" style="display:none"> \
+			<form> \
+				<td><a href="#" id="<%= _id %>_save">save</a></td> \
+				<td><a href="#" id="<%= _id %>_cancel">cancel</a></td> \
+				<td><input type="text" name="<%= _id %>_title" value="<%= title %>"></td> \
+				<td><input type="text" name="<%= _id %>_group" value="<%= group %>"></td> \
+				<td><input type="text" name="<%= _id %>_order" class="input-small" value="<%= order %>"></td> \
+				<td>...</td> \
+			</form> \
+		</tr>');
 
 	$( document ).ready( function() {
-		get_questions('{{ group }}');		
+		get_questions();
 		$('#add_btn').click(add);
-	})
+	});
 </script>
 
 <div class="row-fluid">
 	<div class="span6 offset1">
-		<div id="result">
-		</div>
-		<h3>Questions</h3>
+		<h3>
+			Questions 			
+			<div class="btn-group" style="float:right">
+				<a href="#" class="btn" id="add_btn">
+					Add Question
+				</a>		
+				<a href="/admin/groups"class="btn">
+				Go to Groups
+				</a>
+			</div>
+		</h3>
+		
+
+
 		<table id="questions_table" class="table table-striped">
 			<tr>		
 				<th colspan="2"></th>
@@ -101,12 +112,6 @@
 				<th>Comments</th>	
 			</tr>			
 		</table>		
-		<a href="#" id="add_btn">
-			<button type="button" class="btn">Add</button>
-		</a>
-		<a href="/admin/groups">
-			<button type="button" class="btn btn-inverse">Groups</button>
-		</a>
 	</div>
 </div>
 
