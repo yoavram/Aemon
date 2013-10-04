@@ -75,7 +75,6 @@ def root():
 
 @app.route('/start/<string:session_id>')
 def start(session_id):
-	print "Starting questionare for session", session_id
 	session['session_id'] = session_id
 	session['progress'] = 0
 	return redirect(url_for("start_questionare"))
@@ -98,7 +97,7 @@ def start_questionare():
 
 @app.route('/questionare/<int:group_num>')
 def cont_questionare(group_num):
-	if 'session_id' not in session:
+	if 'session_id' not in session: # TODO does this work?
 		return redirect(url_for("root"))
 	if group_num > groups.count():
 		return redirect(url_for("finish"))
@@ -134,8 +133,6 @@ def logout():
 
 @app.route('/admin/groups')
 def view_groups():
-	if not session.get('admin', False):
-		redirect('/admin')
 	if request.is_xhr:
 		return jsonify(result=groups.find())
 	else:
@@ -145,8 +142,6 @@ def view_groups():
 @app.route('/admin/questions/')
 @app.route('/admin/questions/<string:group>')
 def view_questions(group=''):
-	if not session.get('admin', False):
-		redirect('/admin')
 	if request.is_xhr:
 		if group:
 			qs = questions.find({'group':group})	
@@ -158,15 +153,11 @@ def view_questions(group=''):
 
 @app.route('/admin/answers')
 def view_answers():
-	if not session.get('admin', False):
-		redirect('/admin')
 	#if request.is_xhr:
 	return jsonify(result=answers.find())
 
 @app.route('/admin/question/save', methods=['POST'])
 def save_question():
-	if not session.get('admin', False):
-		redirect('/admin')
 	if request.method == 'POST':
 		_id = request.form.get('_id')		
 		try:
@@ -184,8 +175,6 @@ def save_question():
 
 @app.route('/admin/group/save', methods=['POST'])
 def save_group():
-	if not session.get('admin', False):
-		redirect('/admin')
 	if request.method == 'POST':
 		_id = request.form.get('_id')		
 		try:
@@ -204,15 +193,11 @@ def save_group():
 		
 @app.route('/admin/question/remove/<string:question_id>')
 def remove_question(question_id):
-	if not session.get('admin', False):
-		redirect('/admin')	
 	success = questions.remove({'_id':ObjectId(question_id)})
 	return jsonify(result=success)
 
 @app.route('/admin/group/remove/<string:group_id>')
 def remove_group(group_id):
-	if not session.get('admin', False):
-		redirect('/admin')	
 	success = groups.remove({'_id':ObjectId(group_id)})
 	return jsonify(result=success)
 	
