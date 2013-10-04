@@ -42,7 +42,7 @@ DEBUG = os.environ.get('DEBUG', 'True') == 'True'
 MONGO_URI = os.environ.get('MONGOLAB_URI')
 GOOGLE_ANALYTICS = os.environ.get('GOOGLE_ANALYTICS', '')
 SECRET = os.environ.get('SECRET', 'A0ZXHH!jmN]LWX/,?Rr98j/3yX R~T')
-ADMIN_PW = os.environ.get('ADMIN_PW', '$5$rounds=87555$a5NNYH4VQvtM6XAX$lVAxzku5ovvu82HZA2nkBcdAfEGkRHzHDkuw2MXsvJ1')
+ADMIN_PW = os.environ.get('ADMIN_PW', '$5$rounds=84608$P0jO/99FFwBqiE36$8s6D.dBAPt4iUcC0DBkKcDSpAxlZTMOhVsuQEhYYjF3')
 COLORS = ['','#D7191C', '#FDAE61', '#FFFFBF', '#ABD9E9', '#2C7BB6'] # 1 count (not 0 count)
 
 app = Flask(__name__)
