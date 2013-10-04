@@ -32,13 +32,14 @@
 		g = {'_id':_id,'title':'','order':'','name':''}
 		make_edit_tr(g);
 		edit(_id);
+		$('#edit_'+_id)[0].scrollIntoView();
 	}
 
 	function get_groups() {
 		var url = $SCRIPT_ROOT + '/admin/groups';		
 		$.get(url,
 			function(data) {				
-				_.each(data.result, function(g) {
+				_.each(data.result.reverse(), function(g) {
 					make_view_tr(g);
 					make_edit_tr(g);
 				});				
@@ -47,14 +48,14 @@
 
 	function make_view_tr(g) {
 		var view_tr = template_view_tr(g);
-		$('#groups_table > tbody:last').append(view_tr);
+		$('#groups_table > tbody:last').prepend(view_tr);
 		$('#'+g._id+'_edit').click(function() {edit(g._id);});		
 		$('#'+g._id+'_remove').click(function() {remove(g._id);});
 	}
 
 	function make_edit_tr(g) {
 		var edit_tr = template_edit_tr(g);		
-		$('#groups_table > tbody:last').append(edit_tr);
+		$('#groups_table > tbody:last').prepend(edit_tr);
 		$('#'+g._id+'_save').click(function() {save(g._id);});		
 		$('#'+g._id+'_cancel').click(function() {cancel(g._id);});		
 	}
@@ -95,7 +96,7 @@
 				<a href="#" class="btn" id="add_btn">
 					Add Group
 				</a>		
-				<a href="/admin/groups"class="btn">
+				<a href="/admin/questions"class="btn">
 					Go to Questions
 				</a>
 			</div>

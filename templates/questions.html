@@ -38,7 +38,7 @@
 		var url = $SCRIPT_ROOT + '/admin/questions/{{group}}';		
 		$.get(url,
 			function(data) {			
-				_.each(data.result, function(q) {
+				_.each(data.result.reverse(), function(q) {
 					make_view_tr(q);
 					make_edit_tr(q);
 				});				
@@ -47,14 +47,14 @@
 
 	function make_view_tr(q) {
 		var view_tr = template_view_tr(q);
-		$('#questions_table > tbody:last').append(view_tr);
+		$('#questions_table > tbody:last').prepend(view_tr);
 		$('#'+q._id+'_edit').click(function() {edit(q._id);});		
 		$('#'+q._id+'_remove').click(function() {remove(q._id);});
 	}
 
 	function make_edit_tr(q) {
 		var edit_tr = template_edit_tr(q);		
-		$('#questions_table > tbody:last').append(edit_tr);
+		$('#questions_table > tbody:last').prepend(edit_tr);
 		$('#'+q._id+'_save').click(function() {save(q._id);});		
 		$('#'+q._id+'_cancel').click(function() {cancel(q._id);});		
 	}
