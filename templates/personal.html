@@ -71,13 +71,17 @@
 		</div>
 	</div>
 </form>
+
 <script type="text/javascript">
 	$(document).ready(function(){
 		$("#personalDetailsForm").submit(function() {
 	        //Do the AJAX post
-	        $.post($("#personalDetailsForm").attr("action"), $("#personalDetailsForm").serialize(), function(data){
-	            	window.location = '/start/' + data;
-	        });
+	        $.post(
+	        	$("#personalDetailsForm").attr("action"), 
+	        	$("#personalDetailsForm").serialize(), 
+	        		function(data){
+	            		window.location = '/start/' + data;
+	        	});
 	        //Important. Stop the normal POST
 	        return false;
     	});

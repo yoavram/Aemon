@@ -3,7 +3,8 @@ from flask import Flask, request, render_template, redirect, Response, url_for, 
 from flask.ext.pymongo import PyMongo, ObjectId, InvalidId
 import simplejson
 from passlib.apps import custom_app_context as pwd_context
-from datetime import datetime
+from datetime import datetime, timedelta
+from uuid import uuid4 as uuid
 
 DATE_FORMAT = "%d/%m/%Y"
 SHORT_DATE_FORMAT = "%d/%m/%y"
@@ -62,6 +63,7 @@ else:
 		groups = mongo.db.groups
 		questions = mongo.db.questions
 
+app.permanent_session_lifetime = timedelta(days=3)
 app.config['num_groups'] = groups.count()
 app.config['num_questions'] = questions.count()
 app.jinja_env.filters['format_date'] = string_from_datetime
@@ -110,7 +112,7 @@ def finish():
 
 @app.route('/personal', methods=['POST'])
 def personal():
-    return "12345"
+    return str(uuid())
 
 @app.route('/admin', methods=['GET','POST'])
 def admin():
