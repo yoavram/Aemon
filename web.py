@@ -80,15 +80,15 @@ def root():
 	# TODO Check session id
     return render_template("index.html")
 
-@app.route('/start/<string:session_id>')
-def start(session_id):
-	session['session_id'] = session_id
+@app.route('/start/<string:user_id>')
+def start(user_id):
+	session['user_id'] = user_id
 	session['progress'] = 0
 	return redirect(url_for("start_questionare"))
 
 @app.route('/answer/<int:grp>/<int:que>/<int:ans>')
 def answer(grp,que,ans):
-	data = {"session_id":session["session_id"], "group":grp,"question":que,"answer":ans}
+	data = {"user_id":session["user_id"], "group":grp,"question":que,"answer":ans}
 	success = answers.insert(data)
 	session['progress'] += 1
 	return jsonify(result=success)
@@ -104,7 +104,7 @@ def start_questionare():
 
 @app.route('/questionare/<int:group_num>')
 def cont_questionare(group_num):
-	if 'session_id' not in session: # TODO does this work?
+	if 'user_id' not in session: # TODO does this work?
 		return redirect(url_for("root"))
 	if group_num > groups.count():
 		return redirect(url_for("finish"))
@@ -124,7 +124,7 @@ def personal():
 
 @app.route('/email', methods=['POST'])
 def email():
-	u = users.find_one({'_id':ObjectId(session['session_id'])})
+	u = users.find_one({'_id':ObjectId(session['user_id'])})
 	if u:
 		u['email'] = request.form['email']
 		return jsonify(result=True,email=request.form['email'])
@@ -151,7 +151,7 @@ def logout():
 
 @app.route('/admin/groups')
 def view_groups():
-	if request.is_xhr:
+	if request.is_xhr or 'json' in request.args:
 		return jsonify(result=groups.find())
 	else:
 		return render_template("groups.html")
@@ -160,7 +160,7 @@ def view_groups():
 @app.route('/admin/questions/')
 @app.route('/admin/questions/<string:group>')
 def view_questions(group=''):
-	if request.is_xhr:
+	if request.is_xhr or 'json' in request.args:
 		if group:
 			qs = questions.find({'group':group})	
 		else:
@@ -169,19 +169,22 @@ def view_questions(group=''):
 	else:
 		return render_template("questions.html",group=group)
 
-@app.route('/admin/answers')
-def view_answers():
-	#if request.is_xhr:
-	return jsonify(result=answers.find())
-
 @app.route('/admin/users')
 def view_users():
 	if request.is_xhr:
 		return abort(404)
-	print "args",request.args
 	if 'json' in request.args:
 		return jsonify(result=users.find())
 	return render_template("users.html", users=users.find())
+
+@app.route('/admin/answers')
+def view_answers():
+	if request.is_xhr:
+		return abort(404)
+	if 'json' in request.args:
+		return jsonify(result=answers.find())
+	return render_template("answers.html", answers=answers.find())
+
 
 @app.route('/admin/question/save', methods=['POST'])
 def save_question():

@@ -4,7 +4,7 @@
 <div class="row-fluid">
 	<div class="span6 offset1">
 		<h3>
-			Users
+			Answers
 			<div class="btn-group" style="float:right">
 				<a href="/admin/groups"class="btn">
 					Groups
@@ -12,32 +12,32 @@
 				<a href="/admin/questions"class="btn">
 					Questions
 				</a>
-				<a href="/admin/answers"class="btn">
-					Answers
+				<a href="/admin/users"class="btn">
+					Users
 				</a>
 			</div>
 		</h3>
 		
-		{% if users %}
+		{% if answers %}
 		<table class="table table-striped">
 			<tr>
-				{% for k in users[0].keys() %}		
+				{% for k in answers[0].keys() %}		
 				<th>{{ k }}</th>				
 				{% endfor %}
 			</tr>
 			<tbody>
-				{% for u in users %}
+				{% for a in answers %}
 				<tr>
-					{% for v in u.values() %}
+					{% for v in a.values() %}
 					<td>{{ v }}</td>
 					{% endfor %}
 				</tr>
 				{% endfor %}
 			</tbody>		
 		</table>
-		<a class="btn" href="/admin/users?json">Download</a>
+		<a class="btn" href="/admin/answers?json">Download</a>
 		{% else %}
-		No users.
+		No answers.
 		{% endif %}
 	</div>
 </div>
