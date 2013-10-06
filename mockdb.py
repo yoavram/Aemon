@@ -75,12 +75,12 @@ class MockDb:
 		return False
 
 questions = MockDb([
-			{'_id':ObjectId(), 'group':'Satisfaction', 'title':'Public health systems', 'order':1, 'comments':['Very dissatisfied','','','','Very satisfied']},
-			{'_id':ObjectId(), 'group':'Satisfaction', 'title':'Agencies of internal security', 'order':2},
-			{'_id':ObjectId(), 'group':'Satisfaction', 'title':'Social welfare systems', 'order':3},
-			{'_id':ObjectId(), 'group':'Trust', 'title':'Public health systems', 'order':1},
-			{'_id':ObjectId(), 'group':'Trust', 'title':'Agencies of internal security', 'order':2},
-			{'_id':ObjectId(), 'group':'Trust', 'title':'Social welfare systems', 'order':3}
+			{'_id':ObjectId(), 'group':'Satisfaction', 'title':'Public health systems', 'order':1, 'comments':['Very dissatisfied','','','','Very satisfied'], 'levels':5},
+			{'_id':ObjectId(), 'group':'Satisfaction', 'title':'Agencies of internal security', 'order':2, 'levels':5},
+			{'_id':ObjectId(), 'group':'Satisfaction', 'title':'Social welfare systems', 'order':3, 'levels':5},
+			{'_id':ObjectId(), 'group':'Trust', 'title':'Public health systems', 'order':1, 'levels':5},
+			{'_id':ObjectId(), 'group':'Trust', 'title':'Agencies of internal security', 'order':2, 'levels':5},
+			{'_id':ObjectId(), 'group':'Trust', 'title':'Social welfare systems', 'order':3, 'levels':5}
 		])
 groups = MockDb([
 			{'_id':ObjectId(), 'name':'Satisfaction', 'title':'Below is a list of public institutions and organizations that deliver various services to the public. Please circle the number from 1 to 5 that best reflects your satisfaction with their services. If you are not familiar with some of the subjects below, please try to express a general impression that most closely reflects your opinion.', 'order':1},

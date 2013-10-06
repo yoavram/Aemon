@@ -5,6 +5,7 @@ import simplejson
 from passlib.apps import custom_app_context as pwd_context
 from datetime import datetime, timedelta
 from uuid import uuid4 as uuid
+import colorbrewer
 
 DATE_FORMAT = "%d/%m/%Y"
 SHORT_DATE_FORMAT = "%d/%m/%y"
@@ -43,7 +44,13 @@ MONGO_URI = os.environ.get('MONGOLAB_URI')
 GOOGLE_ANALYTICS = os.environ.get('GOOGLE_ANALYTICS', '')
 SECRET = os.environ.get('SECRET', 'A0ZXHH!jmN]LWX/,?Rr98j/3yX R~T')
 ADMIN_PW = os.environ.get('ADMIN_PW', '$5$rounds=84608$P0jO/99FFwBqiE36$8s6D.dBAPt4iUcC0DBkKcDSpAxlZTMOhVsuQEhYYjF3')
-COLORS = ['','#D7191C', '#FDAE61', '#FFFFBF', '#ABD9E9', '#2C7BB6'] # 1 count (not 0 count)
+COLORS = colorbrewer.YlGnBu
+def RGB2HEX(rgb):
+	 return '#' + ''.join(['{0:02x}'.format(x) for x in rgb])
+for k,v in COLORS.items():
+	v = [RGB2HEX(x) for x in v]
+	COLORS[k] = v
+print COLORS
 
 app = Flask(__name__)
 app.config.from_object(__name__)  
