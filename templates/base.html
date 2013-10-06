@@ -27,18 +27,17 @@
 </head>
 
 <body>
- <!-- Navbar -->
- <div class="navbar">
+
+<div class="navbar">
   <div class="navbar-inner">
-    <a class="brand" href="/">Aemon</a>
-    <ul class="nav">
-      <li><a href="/start/{{ session.session_id }}">Questionare</a></li>
-      <li><a href="#">About</a></li>
-      <li><a href="#">Contact</a></li>
-      <li><a href="/admin">Admin</a></li>
-      {% if session['admin'] %}
-      <li><a href="/logout">Logout</a></li>      
-      {% endif %}
+    <a class="brand" href="#">Aemon</a>
+    <ul class="nav" style="float:right">              
+        <li><a href="#">About</a></li>
+        <li><a href="#">Contact</a></li>
+        <li><a href="/admin">Admin</a></li>
+        {% if session['admin'] %}
+        <li><a href="/logout">Logout</a></li>      
+        {% endif %}
     </ul>
   </div>
 </div>
@@ -55,11 +54,11 @@
     {% block footer %}
     {% endblock footer %}
 
-    <ul class="quick-links">					
+    <ul class="quick-links">          		
      <li><a href="http://twitter.github.com/bootstrap/">Twitter Bootstrap</a></li>
      <li><a href="http://jquery.com/">jQuery</a></li>
      <li><a href="http://glyphicons.com">Glyphicons Free</a></li>
-     <br>
+     <li>|</li>
      <li><a href="http://python.org/">Python</a></li>
      <li><a href="http://flask.pocoo.org/">Flask</a></li>
      <li><a href="http://flask-pymongo.readthedocs.org/">Flask-PyMongo</a></li>
@@ -69,7 +68,7 @@
      <li><a href="http://www.mongolab.com/">MongoLab</a></li>
      <br>
      {% if session['session_id'] %}
-      ID: {{ session['session_id'] }}
+     ID: {{ session['session_id'] }}
      {% endif %}
    </ul>
  </footer>
