@@ -206,19 +206,23 @@ def try_int(value):
 
 @app.route('/admin/question/save', methods=['POST'])
 @login_required
-def save_question():
-	if request.method == 'POST':
-		_id = request.form.get('_id')		
+def save_question(): # TODO cleanup this mess of a function
+	if request.method == 'POST':		
 		try:
-			q = questions.find_one({'_id':ObjectId(_id)})
-			for k in q.keys():
-				if k in request.form:
-					q[k] = try_int(v)
+			_id = ObjectId(request.form.get('_id'))
+			q = questions.find_one({'_id':_id})
+			for k in q.keys():				
+				if k in request.form and k != '_id':
+					q[k] = try_int(request.form[k])
+					if k == 'comments':
+						q[k] = q[k].split(',')
 			success = questions.update(q) #TODO check this returns bool
 		except InvalidId: # New question
 			q = {}
 			for k,v in request.form.items():
 					q[k] = try_int(v)
+					if k == 'comments':
+						q[k] = q[k].split(',')
 			success = questions.insert(q) #TODO check this returns bool
 		reorder_questions()
 		return jsonify(result=success)
@@ -226,12 +230,12 @@ def save_question():
 @app.route('/admin/group/save', methods=['POST'])
 @login_required
 def save_group():
-	if request.method == 'POST':
-		_id = request.form.get('_id')		
+	if request.method == 'POST':		
 		try:
-			g = groups.find_one({'_id':ObjectId(_id)})
+			_id = ObjectId(request.form.get('_id'))
+			g = groups.find_one({'_id':_id})
 			for k in g.keys():
-				if k in request.form:
+				if k in request.form and k != '_id':
 					g[k] = try_int(request.form[k])
 			success = groups.update(g) #TODO check this returns bool
 		except InvalidId: # New question

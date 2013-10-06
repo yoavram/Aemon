@@ -20,6 +20,7 @@
 			group: $('input[name='+_id+'_group]').val(),
 			order: $('input[name='+_id+'_order]').val(),
 			levels: $('input[name='+_id+'_levels]').val(),
+			comments: $('input[name='+_id+'_comments]').val()
 		}, function(data) {location.reload();});		
 	}
 
@@ -30,7 +31,7 @@
 
 	function add() {
 		var _id = Math.floor(Math.random()*1000);
-		q = {'_id':_id,'title':'','order':'','group':'','levels':''}
+		q = {'_id':_id,'title':'','order':'','group':'','levels':'', 'comments':''}
 		make_edit_tr(q);
 		edit(_id);
 	}
@@ -67,6 +68,7 @@
 			<td><%= title %></td> \
 			<td><%= group %></td> \
 			<td><%= levels %></td> \
+			<td><%= comments %></td> \
 			<td><%= order %></td> \
 		</tr>');
 
@@ -78,6 +80,7 @@
 				<td><input type="text" name="<%= _id %>_title" value="<%= title %>"></td> \
 				<td><input type="text" name="<%= _id %>_group" value="<%= group %>"></td> \
 				<td><input type="text" name="<%= _id %>_levels" class="input-small" value="<%= levels %>"></td> \
+				<td><input type="text" name="<%= _id %>_comments" value="<%= comments %>"></td> \
 				<td><input type="text" name="<%= _id %>_order" class="input-small" value="<%= order %>"></td> \
 				</form> \
 		</tr>');
@@ -107,8 +110,8 @@
 				<th>Title</th>
 				<th>Group</th>
 				<th>Levels</th>
-				<th>Order</th>
-				<!--th>Comments</th-->
+				<th>Comments</th>
+				<th>Order</th>				
 			</tr>
 			<tbody>
 			</tbody>		
