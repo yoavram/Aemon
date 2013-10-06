@@ -6,6 +6,8 @@ import simplejson
 from passlib.apps import custom_app_context as pwd_context
 from datetime import datetime, timedelta
 import colorbrewer
+import urllib2
+import HTMLParser
 
 DATE_FORMAT = "%d/%m/%Y"
 SHORT_DATE_FORMAT = "%d/%m/%y"
@@ -20,7 +22,6 @@ class MongoDocumentEncoder(simplejson.JSONEncoder):
 
 def jsonify(*args, **kwargs):
     return Response(simplejson.dumps(dict(*args, **kwargs), cls=MongoDocumentEncoder), mimetype='application/json')
-
 
 def db_name_from_uri(full_uri):
 	ind = full_uri[::-1].find('/')
@@ -51,6 +52,11 @@ def RGB2HEX(rgb):
 for k,v in COLORS.items():
 	v = [RGB2HEX(x) for x in v]
 	COLORS[k] = v
+WELCOME_TITLE = u"Hello!"
+f = urllib2.urlopen('http://lorem-ipsum.me/api/text?format=html')
+WELCOME_TEXT = f.read()
+print WELCOME_TEXT
+f.close()
 
 app = Flask(__name__)
 app.config.from_object(__name__)  
@@ -196,6 +202,14 @@ def view_answers():
 	if 'json' in request.args:
 		return jsonify(result=answers.find())
 	return render_template("answers.html", answers=answers.find())
+
+@app.route('/admin/config')
+@login_required
+def view_config():
+	if request.is_xhr:
+		return abort(404)	
+	return render_template("config.html")
+
 
 def try_int(value):
 	try:		
