@@ -6,15 +6,10 @@
 		<h3>
 			Users
 			<div class="btn-group" style="float:right">
-				<a href="/admin/groups"class="btn">
-					Groups
+				<a class="btn" href="/admin/users?json">
+					Download
 				</a>
-				<a href="/admin/questions"class="btn">
-					Questions
-				</a>
-				<a href="/admin/answers"class="btn">
-					Answers
-				</a>
+
 			</div>
 		</h3>
 		
@@ -35,19 +30,18 @@
 				{% endfor %}
 			</tbody>		
 		</table>		
-		<a class="btn" href="/admin/users?json">Download</a>
 		<a class="btn" href="#" id="raffle">Raffle</a>
 		{% else %}
 		No users.
 		{% endif %}		
 		<div id="winner">
-		<br>
+			<br>
 		</div>
 	</div>
 </div>
 <script type="text/javascript">
 	var emails = [{% for u in users %} '{{u.email}}', {% endfor %}];
-		emails = _.filter(emails, function(e) {return e != '';});
+	emails = _.filter(emails, function(e) {return e != '';});
 
 	$( document ).ready( function() {		
 		$('#raffle').click(function () {
@@ -55,6 +49,6 @@
 			$('#winner').append("The winner is <a href='mailto:" + winner + "'>" + winner + '</a>\t');
 		});
 	});
-		
+	
 </script>
 {% endblock %}

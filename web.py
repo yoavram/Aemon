@@ -197,6 +197,12 @@ def view_answers():
 		return jsonify(result=answers.find())
 	return render_template("answers.html", answers=answers.find())
 
+def try_int(value):
+	try:		
+		value = int(value)
+	except ValueError:
+		pass
+	return value
 
 @app.route('/admin/question/save', methods=['POST'])
 @login_required
@@ -207,17 +213,12 @@ def save_question():
 			q = questions.find_one({'_id':ObjectId(_id)})
 			for k in q.keys():
 				if k in request.form:
-					try:
-						v = request.form[k]
-						v = int(v)
-					except ValueError:
-						pass
-					q[k] = v
+					q[k] = try_int(v)
 			success = questions.update(q) #TODO check this returns bool
 		except InvalidId: # New question
 			q = {}
 			for k,v in request.form.items():
-					q[k] = v
+					q[k] = try_int(v)
 			success = questions.insert(q) #TODO check this returns bool
 		reorder_questions()
 		return jsonify(result=success)
@@ -231,12 +232,12 @@ def save_group():
 			g = groups.find_one({'_id':ObjectId(_id)})
 			for k in g.keys():
 				if k in request.form:
-					g[k] = request.form[k]
+					g[k] = try_int(request.form[k])
 			success = groups.update(g) #TODO check this returns bool
 		except InvalidId: # New question
 			g = {}
 			for k,v in request.form.items():
-					g[k] = v
+					g[k] = try_int(v)
 			success = groups.insert(g) #TODO check this returns bool
 		reorder_groups()
 		return jsonify(result=success)

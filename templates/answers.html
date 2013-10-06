@@ -6,15 +6,10 @@
 		<h3>
 			Answers
 			<div class="btn-group" style="float:right">
-				<a href="/admin/groups"class="btn">
-					Groups
+				<a class="btn" href="/admin/answers?json">
+					Download
 				</a>
-				<a href="/admin/questions"class="btn">
-					Questions
-				</a>
-				<a href="/admin/users"class="btn">
-					Users
-				</a>
+
 			</div>
 		</h3>
 		
@@ -35,7 +30,6 @@
 				{% endfor %}
 			</tbody>		
 		</table>
-		<a class="btn" href="/admin/answers?json">Download</a>
 		{% else %}
 		No answers.
 		{% endif %}

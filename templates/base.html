@@ -28,51 +28,73 @@
 
 <body>
 
-<div class="navbar">
-  <div class="navbar-inner">
-    <a class="brand" href="/">Aemon</a>
-    <ul class="nav" style="float:right">              
+  <div class="navbar">
+    <div class="navbar-inner">
+      <a class="brand" href="/">Aemon</a>
+      <ul class="nav" style="float:right">              
         <li><a href="#">About</a></li>
         <li><a href="#">Contact</a></li>
         <li><a href="/admin">Admin</a></li>
         {% if session['admin'] %}
         <li><a href="/logout">Logout</a></li>      
         {% endif %}
-    </ul>
+      </ul>
+    </div>
   </div>
-</div>
 
-<!-- BODY -->	
-{% block main %}
+  {% if session['admin'] %}
+  <div class="row-fluid">
+    <div class="span6 offset1">
+      <div class="btn-group" style="float:right">
+        <a href="/admin/groups"class="btn">
+          Groups
+        </a>
+        <a href="/admin/questions"class="btn">
+          Questions
+        </a>
+        <a href="/admin/answers"class="btn">
+          Answers
+        </a>
+        <a href="/admin/users"class="btn">
+          Users
+        </a>
+      </div>
+    </div>
+  </div>
+  {% endif %}
 
-{% endblock %}
+  <!-- BODY -->
 
-<!-- FOOTER -->
-<div class="row-fluid">
-  <div class="span10 offset1">
-   <footer class="colophon"> 
-    {% block footer %}
-    {% endblock footer %}
+  {% block main %}
 
-    <ul class="quick-links">          		
-     <li><a href="http://twitter.github.com/bootstrap/">Twitter Bootstrap</a></li>
-     <li><a href="http://jquery.com/">jQuery</a></li>
-     <li><a href="http://glyphicons.com">Glyphicons Free</a></li>
-     <li>|</li>
-     <li><a href="http://python.org/">Python</a></li>
-     <li><a href="http://flask.pocoo.org/">Flask</a></li>
-     <li><a href="http://flask-pymongo.readthedocs.org/">Flask-PyMongo</a></li>
-     <li><a href="http://www.mongodb.org/">MongoDB</a></li>
-     <li>|</li>
-     <li><a href="http://www.heroku.com/">Heroku</a></li>
-     <li><a href="http://www.mongolab.com/">MongoLab</a></li>
-     <br>
-     {% if session['session_id'] %}
-     ID: {{ session['session_id'] }}
-     {% endif %}
-   </ul>
- </footer>
-</div>
+  {% endblock %}
+
+  <!-- FOOTER -->
+  <div class="row-fluid">
+    <div class="span10 offset1">
+     <footer class="colophon"> 
+      {% block footer %}
+      {% endblock footer %}
+
+      <ul class="quick-links">          		
+       <li><a href="http://twitter.github.com/bootstrap/">Twitter Bootstrap</a></li>
+       <li><a href="http://jquery.com/">jQuery</a></li>
+       <li><a href="http://glyphicons.com">Glyphicons Free</a></li>
+       <li>|</li>
+       <li><a href="http://python.org/">Python</a></li>
+       <li><a href="http://flask.pocoo.org/">Flask</a></li>
+       <li><a href="http://flask-pymongo.readthedocs.org/">Flask-PyMongo</a></li>
+       <li><a href="http://www.mongodb.org/">MongoDB</a></li>
+       <li>|</li>
+       <li><a href="http://www.heroku.com/">Heroku</a></li>
+       <li><a href="http://www.mongolab.com/">MongoLab</a></li>
+       <br>
+       {% if session['session_id'] %}
+       ID: {{ session['session_id'] }}
+       {% endif %}
+     </ul>
+   </footer>
+ </div>
 </div>
 </body>
 </html>
