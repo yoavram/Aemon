@@ -1,63 +1,46 @@
 {% extends "base.html" %}
 
 {% block main %}
-<style>
-#progressbar {
-		width: 400px;
-		height: 22px;
-		border: 1px solid #111;
-		background-color: #292929;
-}
-
-#progressbar div {
-		height: 100%;
-		color: #fff;
-		text-align: right;
-		line-height: 22px; /* same as #progressbar height if we want text middle aligned */
-		width: 0;
-		background-color: #0099ff;		
-}
 </style>
 <script type="text/javascript">
-	function answer(group,question,answer) {
+	function answer(group, question, answer) {
 		$.ajax({
-		  url: "/answer/"+group.toString()+"/"+question.toString()+"/"+answer.toString()
+			url: "/answer/"+group.toString()+"/"+question.toString()+"/"+answer.toString()
 		}).done(function() {			
 			if (question < {{ questions | length }}) {
 				$('#q'+question.toString()).hide();			
 				$('#q'+(question+1).toString()).show();							
-				progress();
+				progress = progress + 1;
+				updateProgressBar();
 			} else {
 				window.location ="/questionare/{{ group.order + 1 }}";				
 			}
 		});
 	}
-	var myProgress = {{ session['progress'] }};
-	function progress() {		
-		myProgress = myProgress + 1;    	
-		updateProgress();
-  	}
-  	function updateProgress() {
-  		var percent = Math.round(100 * myProgress / {{ config.num_questions }});
-		var progressBarWidth = percent * $('#progressbar').width() / 100;
-		var progressDiv = $('#progressbar').find('div');
-		progressDiv.animate({ width: progressBarWidth }, 500);
-		if (percent % 25 == 0) {
-			progressDiv.html(percent + "%&nbsp;");
-		} else {
-			progressDiv.html("&nbsp;");
-		}
+	var progress = {{ session['progress'] }};
+	var numQuestions = {{ config.num_questions }};
+	function updateProgressBar() {
+		var rate = 100*progress/numQuestions;
+		var bar = Math.floor(rate / 25);
+		$('.bar').each(function(i,e) {
+			if (i<bar) {
+				$(this).css('width','25%');
+			} else if (i == bar) {
+				var per = rate - 25*bar;
+				$(this).css('width',per.toString()+'%');
+			} else {
+				$(this).css('width','0%');
+			}			
+		});
 	}
-
-  	function next() {
-  		$("#nextBtn").hide();
-  		$("#q1").show();
-  	}
-  	window.onload = function()
-    {
-    	updateProgress();
-    };
-
+	function next() {
+		$("#nextBtn").hide();
+		$("#q1").show();
+	}
+	$(document).ready(function(){
+		updateProgressBar();
+		$('#nextBtn').click(next);
+	});
 </script>
 
 <div class="row-fluid">
@@ -66,7 +49,7 @@
 		{{ group.title }}
 		<br>		
 		<br>
-		<a href="javascript:next()" id="nextBtn"><button class="btn btn-large"><i class="icon-arrow-right"></i> Next</button></a>
+		<a href="#" id="nextBtn"><button class="btn btn-large"><i class="icon-arrow-right"></i> Next</button></a>
 		{% for q in questions %}
 		<div id="q{{q.order}}" style="display:none;">
 			<h3 style="text-align:center">{{ q.title }}</h3>
@@ -99,8 +82,16 @@
 </div>
 
 <div class="row-fluid">
-<!-- http://workshop.rs/2012/12/animated-progress-bar-in-4-lines-of-jquery/ -->
-<div class="span6 offset3" id="progressbar"><div></div></div>
+	<div class="span6 offset3">
+		<div>
+			<div class="progress">
+				<div class="bar bar-danger" style="width: 0%;"></div>
+				<div class="bar bar-warning" style="width: 0%;"></div>
+				<div class="bar bar-info" style="width: 0%;"></div>
+				<div class="bar bar-success" style="width: 0%;"></div>
+			</div>
+		</div>
+	</div>
 </div>
 
 {% endblock main %}
