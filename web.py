@@ -4,7 +4,6 @@ from flask.ext.pymongo import PyMongo, ObjectId, InvalidId
 import simplejson
 from passlib.apps import custom_app_context as pwd_context
 from datetime import datetime, timedelta
-from uuid import uuid4 as uuid
 import colorbrewer
 
 DATE_FORMAT = "%d/%m/%Y"
@@ -44,13 +43,13 @@ MONGO_URI = os.environ.get('MONGOLAB_URI')
 GOOGLE_ANALYTICS = os.environ.get('GOOGLE_ANALYTICS', '')
 SECRET = os.environ.get('SECRET', 'A0ZXHH!jmN]LWX/,?Rr98j/3yX R~T')
 ADMIN_PW = os.environ.get('ADMIN_PW', '$5$rounds=84608$P0jO/99FFwBqiE36$8s6D.dBAPt4iUcC0DBkKcDSpAxlZTMOhVsuQEhYYjF3')
+GIFT = True
 COLORS = colorbrewer.YlGnBu
 def RGB2HEX(rgb):
 	 return '#' + ''.join(['{0:02x}'.format(x) for x in rgb])
 for k,v in COLORS.items():
 	v = [RGB2HEX(x) for x in v]
 	COLORS[k] = v
-print COLORS
 
 app = Flask(__name__)
 app.config.from_object(__name__)  
@@ -59,7 +58,7 @@ app.secret_key = SECRET # TODO check if I can remove this
 
 if app.debug:
 	print " * Running in debug mode"
-	from mockdb import groups, questions, answers
+	from mockdb import groups, questions, answers, users
 else:
 	app.config['MONGO_DBNAME'] = db_name_from_uri(app.config['MONGO_URI'])
 	mongo = PyMongo(app)
@@ -68,6 +67,7 @@ else:
 		groups = mongo.db.groups
 		questions = mongo.db.questions
 		answers = mongo.db.answers
+		users = mongo.db.users
 
 app.permanent_session_lifetime = timedelta(days=3)
 app.config['num_groups'] = groups.count()
@@ -86,9 +86,9 @@ def start(session_id):
 	session['progress'] = 0
 	return redirect(url_for("start_questionare"))
 
-@app.route('/answer/<int:que>/<int:ans>')
-def answer(que,ans):
-	data = {"session_id":session["session_id"], "question":que,"answer":ans}
+@app.route('/answer/<int:grp>/<int:que>/<int:ans>')
+def answer(grp,que,ans):
+	data = {"session_id":session["session_id"], "group":grp,"question":que,"answer":ans}
 	success = answers.insert(data)
 	session['progress'] += 1
 	return jsonify(result=success)
@@ -118,7 +118,21 @@ def finish():
 
 @app.route('/personal', methods=['POST'])
 def personal():
-    return str(uuid())
+	data = request.form.copy()
+	uid = users.insert(data)
+	# DEBUG
+	for u in users.find():
+		print u
+	return jsonify(result=uid)
+
+@app.route('/email', methods=['POST'])
+def email():
+	u = users.find_one({'_id':ObjectId(session['session_id'])})
+	if u:
+		u['email'] = request.form['email']
+		return jsonify(result=True,email=request.form['email'])
+	else:
+		return jsonify(result=False)
 
 @app.route('/admin', methods=['GET','POST'])
 def admin():

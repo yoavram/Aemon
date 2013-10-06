@@ -87,3 +87,4 @@ groups = MockDb([
 			{'_id':ObjectId(), 'name':'Trust', 'title':'In the following section you will find a list of various agencies and organizations. Please circle the number from 1 to 5 that best reflects the trust you have in each of them.', 'order':2}
 		])	
 answers = MockDb([])
+users = MockDb([])

@@ -4,20 +4,15 @@
 </div>
 <form class="form-horizontal" id="personalDetailsForm"  action="/personal" method="post">
 	<div class="control-group">
-		<div class="controls">
-
-		</div>
-	</div>
-	<div class="control-group">
 		<label class="control-label" for="age">Age</label>
 		<div class="controls">
-			<input type="text" id="age">
+			<input type="text" name="age">
 		</div>
 	</div>
 	<div class="control-group">
 		<label class="control-label" for="country">Country</label>
 		<div class="controls">
-			<input type="text" id="country" placeholder="Where do you work?">
+			<input type="text" name="country" placeholder="Where do you work?">
 		</div>
 	</div>
 	<div class="control-group">
@@ -44,25 +39,25 @@
 	<div class="control-group">
 		<label class="control-label" for="education">Field of education</label>
 		<div class="controls">
-			<input type="text" id="education" placeholder="Chemistry">
-		</div>
-	</div>
-	<div class="control-group">
-		<label class="control-label" for="research">Field of research</label>
-		<div class="controls">
-			<input type="text" id="research" placeholder="Molecular biology">
+			<input type="text" name="education" placeholder="Chemistry">
 		</div>
 	</div>
 	<div class="control-group">
 		<label class="control-label" for="faculty">Faculty</label>
 		<div class="controls">
-			<input type="text" id="faculty" placeholder="Your affiliation">
+			<input type="text" name="faculty" placeholder="Your affiliation">
 		</div>
 	</div>
 	<div class="control-group">
 		<label class="control-label" for="department">Department</label>
 		<div class="controls">
-			<input type="text" id="department" placeholder="Your affiliation">
+			<input type="text" name="department" placeholder="Your affiliation">
+		</div>
+	</div>	
+	<div class="control-group">
+		<label class="control-label" for="research">Field of research (opt.)</label>
+		<div class="controls">
+			<input type="text" name="research" placeholder="Molecular biology">
 		</div>
 	</div>
 	<div class="control-group">
@@ -80,7 +75,7 @@
 	        	$("#personalDetailsForm").attr("action"), 
 	        	$("#personalDetailsForm").serialize(), 
 	        		function(data){
-	            		window.location = '/start/' + data;
+	            		window.location = '/start/' + data.result;
 	        	});
 	        //Important. Stop the normal POST
 	        return false;

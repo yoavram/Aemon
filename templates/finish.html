@@ -2,46 +2,72 @@
 
 {% block main %}
 <style>
-#progressbar {
+	#progressbar {
 		width: 400px;
 		height: 22px;
 		border: 1px solid #111;
 		background-color: #292929;
-}
+	}
 
-#progressbar div {
+	#progressbar div {
 		height: 100%;
 		color: #fff;
 		text-align: right;
 		line-height: 22px; /* same as #progressbar height if we want text middle aligned */
 		width: 0;
 		background-color: #0099ff;
-}
+	}
 </style>
 
-<script type="text/javascript">
-	window.onload = function()
-    {
+<script type="text/javascript">	
+	$(document).ready(function(){
 		var progressBarWidth = $('#progressbar').width();
-    	var progressDiv = $('#progressbar').find('div');
+		var progressDiv = $('#progressbar').find('div');
 		progressDiv.animate({ width: progressBarWidth }, 500);
 		progressDiv.html(100 + "%&nbsp;");
-    };
+
+		$("#emailForm").submit(function() {
+	        //Do the AJAX post
+	        $.post(
+	        	$("#emailForm").attr("action"), 
+	        	$("#emailForm").serialize(), 
+	        		function(data){
+	            		if (data.result) {
+	            			$('#emailInputDiv').html("<strong>We recieved your Email address: "+data.email+"</strong><br><br>");
+	            		} else {
+	            			$('#emailInputDiv').html("<strong>We didn't recieve your email, please <a href='/contact'>contact us</a></strong><br><br>");
+	            		}
+	        	});
+	        //Important. Stop the normal POST
+	        return false;
+    	});
+	});
 </script>
 <div class="row-fluid">
 	<div class="span8 offset1">
-	<h2>Thank you!</h2>
-	Your participation is highly appreciated.
-	<br>
-	Yours,
-	<br>
-	The Staff
-	<br>
-	<br>
+		<h2>Thank you!</h2>
+		Your participation is highly appreciated.
+		<br>
+		{% if config.GIFT %}
+		<br>
+		<div id="emailInputDiv">		
+		If you would like to participate in the gift raffle, please enter your email address:
+		<br><br>
+		<form class="form-inline" id="emailForm"  action="/email" method="post">
+			<input type="text" name="email" id="email" class="input-medium" placeholder="Email address">
+			<button type="submit" class="btn btn-primary"><i class="icon-ok icon-white"></i> Send</button>
+		</form>
+		</div>		
+		{% endif %}
+		Yours,
+		<br>
+		The Staff
+		<br>
+		<br>
 	</div>
 </div>
 
 <div class="row-fluid">
-<div class="span8 offset1" id="progressbar"><div></div></div>
+	<div class="span8 offset1" id="progressbar"><div></div></div>
 </div>
 {% endblock main %}
