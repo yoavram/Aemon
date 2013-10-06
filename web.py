@@ -185,7 +185,12 @@ def save_question():
 			q = questions.find_one({'_id':ObjectId(_id)})
 			for k in q.keys():
 				if k in request.form:
-					q[k] = request.form[k]
+					try:
+						v = request.form[k]
+						v = int(v)
+					except ValueError:
+						pass
+					q[k] = v
 			success = questions.update(q) #TODO check this returns bool
 		except InvalidId: # New question
 			q = {}

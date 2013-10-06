@@ -18,7 +18,8 @@
 			_id: _id,
 			title: $('input[name='+_id+'_title]').val(),
 			group: $('input[name='+_id+'_group]').val(),
-			order: $('input[name='+_id+'_order]').val()
+			order: $('input[name='+_id+'_order]').val(),
+			levels: $('input[name='+_id+'_levels]').val(),
 		}, function(data) {location.reload();});		
 	}
 
@@ -29,7 +30,7 @@
 
 	function add() {
 		var _id = Math.floor(Math.random()*1000);
-		q = {'_id':_id,'title':'','order':'','group':''}
+		q = {'_id':_id,'title':'','order':'','group':'','levels':''}
 		make_edit_tr(q);
 		edit(_id);
 	}
@@ -65,8 +66,8 @@
 			<td><a href="#"id="<%= _id %>_remove">remove</a></td> \
 			<td><%= title %></td> \
 			<td><%= group %></td> \
+			<td><%= levels %></td> \
 			<td><%= order %></td> \
-			<td>...</td> \
 		</tr>');
 
 	var template_edit_tr = _.template(' \
@@ -76,9 +77,9 @@
 				<td><a href="#" id="<%= _id %>_cancel">cancel</a></td> \
 				<td><input type="text" name="<%= _id %>_title" value="<%= title %>"></td> \
 				<td><input type="text" name="<%= _id %>_group" value="<%= group %>"></td> \
+				<td><input type="text" name="<%= _id %>_levels" class="input-small" value="<%= levels %>"></td> \
 				<td><input type="text" name="<%= _id %>_order" class="input-small" value="<%= order %>"></td> \
-				<td>...</td> \
-			</form> \
+				</form> \
 		</tr>');
 
 	$( document ).ready( function() {
@@ -96,7 +97,7 @@
 					Add Question
 				</a>		
 				<a href="/admin/groups"class="btn">
-				Go to Groups
+					Go to Groups
 				</a>
 			</div>
 		</h3>
@@ -108,8 +109,9 @@
 				<th colspan="2"></th>
 				<th>Title</th>
 				<th>Group</th>
+				<th>Levels</th>
 				<th>Order</th>
-				<th>Comments</th>	
+				<!--th>Comments</th-->
 			</tr>
 			<tbody>
 			</tbody>		
