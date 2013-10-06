@@ -6,10 +6,15 @@ DATE_FORMAT = "%d/%m/%Y"
 def datetime_from_string(string):
 	return datetime.strptime(string, DATE_FORMAT)
 
+class MockList(list):
+	def sort(self, key='_id', direction=1):
+		return list.sort(self, key=lambda x: x[key], reverse=direction==2)
+	
+
 class MockDb:
 	def __init__(self, data):
-		self.data = data
-
+		self.data = MockList(data)
+		
 	def insert(self, post):
 		_id = ObjectId()
 		post['_id'] = _id
@@ -28,7 +33,7 @@ class MockDb:
 
 	def find(self, spec=None, sort=None):
 		if spec:
-			data = []
+			data = MockList([])
 			for d in self.data:
 				match = True
 				for k,v in spec.items():

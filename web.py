@@ -88,11 +88,11 @@ def answer(que,ans):
 
 @app.route('/questionare')
 def start_questionare():	
+	group_num = 1
 	if 'group' in session:
 		group = groups.find_one({'name':session['group']})
-		group_num = group['order']
-	else:	
-		group_num = 1
+		if group:
+			group_num = group['order']
 	return redirect(url_for("cont_questionare", group_num=group_num))
 
 @app.route('/questionare/<int:group_num>')
@@ -171,6 +171,7 @@ def save_question():
 			for k,v in request.form.items():
 					q[k] = v
 			success = questions.insert(q) #TODO check this returns bool
+		reorder_questions()
 		return jsonify(result=success)
 
 @app.route('/admin/group/save', methods=['POST'])
@@ -179,31 +180,48 @@ def save_group():
 		_id = request.form.get('_id')		
 		try:
 			g = groups.find_one({'_id':ObjectId(_id)})
-			for k in q.keys():
+			for k in g.keys():
 				if k in request.form:
 					g[k] = request.form[k]
-			success = groups.update(q) #TODO check this returns bool
+			success = groups.update(g) #TODO check this returns bool
 		except InvalidId: # New question
 			g = {}
 			for k,v in request.form.items():
 					g[k] = v
 			success = groups.insert(g) #TODO check this returns bool
+		reorder_groups()
 		return jsonify(result=success)
 
 		
 @app.route('/admin/question/remove/<string:question_id>')
 def remove_question(question_id):
 	success = questions.remove({'_id':ObjectId(question_id)})
+	reorder_questions()
 	return jsonify(result=success)
 
 @app.route('/admin/group/remove/<string:group_id>')
 def remove_group(group_id):
 	success = groups.remove({'_id':ObjectId(group_id)})
+	reorder_groups()
 	return jsonify(result=success)
 	
+def reorder_questions():
+	for g in groups.find():
+		cursor = questions.find({'group':g['name']})
+		reorder_cursor(cursor,questions)
+
+def reorder_groups():
+	cursor = groups.find()
+	reorder_cursor(cursor,groups)
+
+def reorder_cursor(cursor, collection):
+	cursor.sort('order') # TODO mockdb doesn't accept params to sort
+	for i,x in enumerate(cursor):
+		x['order'] = i + 1
+		collection.update(x)
 
 
-if __name__ == '__main__':
+if __name__ == '__main__':	
 	port = int(os.environ.get('PORT', 5005))
 	app.run(host='0.0.0.0', port=port, debug=app.debug)	
 	print "Finished"
