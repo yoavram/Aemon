@@ -15,7 +15,7 @@
 		text-align: right;
 		line-height: 22px; /* same as #progressbar height if we want text middle aligned */
 		width: 0;
-		background-color: #0099ff;
+		background-color: #0099ff;		
 }
 </style>
 <script type="text/javascript">
@@ -61,18 +61,16 @@
 </script>
 
 <div class="row-fluid">
-	<div class="span8 offset1">
-		<h2>Questionare</h2>
-		<h3>{{ group.name }}</h3>
+	<div class="span6 offset3">		
+		<h2>{{ group.name }}</h2>
 		{{ group.title }}
 		<br>		
 		<br>
 		<a href="javascript:next()" id="nextBtn"><button class="btn btn-large"><i class="icon-arrow-right"></i> Next</button></a>
-
 		{% for q in questions %}
-		<div id="q{{q.order}}" style="display:none">
-			<h4>{{ q.title }}</h4>
-			<table style="height:100px;width:500px;table-layout:fixed;">
+		<div id="q{{q.order}}" style="display:none;">
+			<h3 style="text-align:center">{{ q.title }}</h3>
+			<table style="height:100px;width:500px;table-layout:fixed;margin:0 auto;">
 
 				<tr>
 					{% for index in range(q.levels) %}					
@@ -102,7 +100,7 @@
 
 <div class="row-fluid">
 <!-- http://workshop.rs/2012/12/animated-progress-bar-in-4-lines-of-jquery/ -->
-<div class="span8 offset1" id="progressbar"><div></div></div>
+<div class="span6 offset3" id="progressbar"><div></div></div>
 </div>
 
 {% endblock main %}
