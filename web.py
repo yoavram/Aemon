@@ -1,6 +1,7 @@
 import os
 from flask import Flask, request, render_template, redirect, Response, url_for, session
 from flask.ext.pymongo import PyMongo, ObjectId, InvalidId
+from functools import wraps
 import simplejson
 from passlib.apps import custom_app_context as pwd_context
 from datetime import datetime, timedelta
@@ -75,9 +76,16 @@ app.config['num_questions'] = questions.count()
 app.jinja_env.filters['format_date'] = string_from_datetime
 app.jinja_env.filters['format_date_short'] = short_string_from_datetime
 
+def login_required(f):
+    @wraps(f)
+    def decorated_function(*args, **kwargs):
+        if not session['admin']:        	
+        	return redirect(url_for('admin'))
+        return f(*args, **kwargs)
+    return decorated_function
+
 @app.route('/')
 def root():
-	# TODO Check session id
     return render_template("index.html")
 
 @app.route('/start/<string:user_id>')
@@ -132,7 +140,7 @@ def email():
 		return jsonify(result=False)
 
 @app.route('/admin', methods=['GET','POST'])
-def admin():
+def admin():	
 	# POST
 	if request.method == 'POST':
 		pw = request.form['password']		
@@ -141,7 +149,7 @@ def admin():
 		session['admin'] = True	
 	# GET 
 	elif not session.get('admin', False): 
-			return render_template("login.html", failed=False)		
+			return render_template("login.html", failed=False)
 	return redirect(url_for('view_groups'))
 
 @app.route('/logout')
@@ -150,6 +158,7 @@ def logout():
 	return redirect('/')
 
 @app.route('/admin/groups')
+@login_required
 def view_groups():
 	if request.is_xhr or 'json' in request.args:
 		return jsonify(result=groups.find())
@@ -159,6 +168,7 @@ def view_groups():
 @app.route('/admin/questions')
 @app.route('/admin/questions/')
 @app.route('/admin/questions/<string:group>')
+@login_required
 def view_questions(group=''):
 	if request.is_xhr or 'json' in request.args:
 		if group:
@@ -170,6 +180,7 @@ def view_questions(group=''):
 		return render_template("questions.html",group=group)
 
 @app.route('/admin/users')
+@login_required
 def view_users():
 	if request.is_xhr:
 		return abort(404)
@@ -178,6 +189,7 @@ def view_users():
 	return render_template("users.html", users=users.find())
 
 @app.route('/admin/answers')
+@login_required
 def view_answers():
 	if request.is_xhr:
 		return abort(404)
@@ -187,6 +199,7 @@ def view_answers():
 
 
 @app.route('/admin/question/save', methods=['POST'])
+@login_required
 def save_question():
 	if request.method == 'POST':
 		_id = request.form.get('_id')		
@@ -210,6 +223,7 @@ def save_question():
 		return jsonify(result=success)
 
 @app.route('/admin/group/save', methods=['POST'])
+@login_required
 def save_group():
 	if request.method == 'POST':
 		_id = request.form.get('_id')		
@@ -229,12 +243,14 @@ def save_group():
 
 		
 @app.route('/admin/question/remove/<string:question_id>')
+@login_required
 def remove_question(question_id):
 	success = questions.remove({'_id':ObjectId(question_id)})
 	reorder_questions()
 	return jsonify(result=success)
 
 @app.route('/admin/group/remove/<string:group_id>')
+@login_required
 def remove_group(group_id):
 	success = groups.remove({'_id':ObjectId(group_id)})
 	reorder_groups()
