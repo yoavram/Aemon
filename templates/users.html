@@ -34,12 +34,27 @@
 				</tr>
 				{% endfor %}
 			</tbody>		
-		</table>
+		</table>		
 		<a class="btn" href="/admin/users?json">Download</a>
+		<a class="btn" href="#" id="raffle">Raffle</a>
 		{% else %}
 		No users.
-		{% endif %}
+		{% endif %}		
+		<div id="winner">
+		<br>
+		</div>
 	</div>
 </div>
+<script type="text/javascript">
+	var emails = [{% for u in users %} '{{u.email}}', {% endfor %}];
+		emails = _.filter(emails, function(e) {return e != '';});
 
+	$( document ).ready( function() {		
+		$('#raffle').click(function () {
+			var winner = emails[_.random(emails.length-1)];
+			$('#winner').append("The winner is <a href='mailto:" + winner + "'>" + winner + '</a>\t');
+		});
+	});
+		
+</script>
 {% endblock %}
