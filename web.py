@@ -119,10 +119,7 @@ def finish():
 @app.route('/personal', methods=['POST'])
 def personal():
 	data = request.form.copy()
-	uid = users.insert(data)
-	# DEBUG
-	for u in users.find():
-		print u
+	uid = users.insert(data)	
 	return jsonify(result=uid)
 
 @app.route('/email', methods=['POST'])
@@ -176,6 +173,15 @@ def view_questions(group=''):
 def view_answers():
 	#if request.is_xhr:
 	return jsonify(result=answers.find())
+
+@app.route('/admin/users')
+def view_users():
+	if request.is_xhr:
+		return abort(404)
+	print "args",request.args
+	if 'json' in request.args:
+		return jsonify(result=users.find())
+	return render_template("users.html", users=users.find())
 
 @app.route('/admin/question/save', methods=['POST'])
 def save_question():
