@@ -19,19 +19,25 @@
 	}
 	var progress = {{ session['progress'] }};
 	var numQuestions = {{ config.num_questions }};
+	var progress_text = 0;
 	function updateProgressBar() {
 		var rate = 100*progress/numQuestions;
 		var bar = Math.floor(rate / 25);
 		$('.bar').each(function(i,e) {
 			if (i<bar) {
 				$(this).css('width','25%');
+			
 			} else if (i == bar) {
 				var per = rate - 25*bar;
-				$(this).css('width',per.toString()+'%');
+				$(this).css('width',per.toFixed(0)+'%');
 			} else {
 				$(this).css('width','0%');
 			}			
 		});
+		if (rate >= progress_text + 25) {
+			progress_text = rate;
+			$('.progress_text').html(progress_text.toFixed(0) + "%");
+		}
 	}
 	function next() {
 		$("#nextBtn").hide();
@@ -87,15 +93,15 @@
 </div>
 
 <div class="row-fluid">
-	<div class="span6 offset3">
-		<div>
+	<div class="span6 offset3">		
 			<div class="progress">
 				<div class="bar bar-danger" style="width: 0%;"></div>
 				<div class="bar bar-warning" style="width: 0%;"></div>
 				<div class="bar bar-info" style="width: 0%;"></div>
 				<div class="bar bar-success" style="width: 0%;"></div>
 			</div>
-		</div>
+			<div class="progress_text">
+			</div>
 	</div>
 </div>
 

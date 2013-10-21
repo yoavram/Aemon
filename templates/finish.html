@@ -9,16 +9,16 @@
 	        $.post(
 	        	$("#emailForm").attr("action"), 
 	        	$("#emailForm").serialize(), 
-	        		function(data){
-	            		if (data.result) {
-	            			$('#emailInputDiv').html("<strong>We recieved your Email address: "+data.email+"</strong><br><br>");
-	            		} else {
-	            			$('#emailInputDiv').html("<strong>We didn't recieve your email, please <a href='/contact'>contact us</a></strong><br><br>");
-	            		}
+	        	function(data){
+	        		if (data.result) {
+	        			$('#emailInputDiv').html("<strong>We recieved your Email address: "+data.email+"</strong><br><br>");
+	        		} else {
+	        			$('#emailInputDiv').html("<strong>We didn't recieve your email, please <a href='/contact'>contact us</a></strong><br><br>");
+	        		}
 	        	});
 	        //Important. Stop the normal POST
 	        return false;
-    	});
+	    });
 	});
 </script>
 <div class="row-fluid">
@@ -29,12 +29,12 @@
 		{% if config.GIFT %}
 		<br>
 		<div id="emailInputDiv">		
-		If you would like to participate in the gift raffle, please enter your email address:
-		<br><br>
-		<form class="form-inline" id="emailForm"  action="/email" method="post">
-			<input type="text" name="email" id="email" class="input-medium" placeholder="Email address">
-			<button type="submit" class="btn btn-primary"><i class="icon-ok icon-white"></i> Send</button>
-		</form>
+			If you would like to participate in the gift raffle, please enter your email address:
+			<br><br>
+			<form class="form-inline" id="emailForm"  action="/email" method="post">
+				<input type="text" name="email" id="email" class="input-medium" placeholder="Email address">
+				<button type="submit" class="btn btn-primary"><i class="icon-ok icon-white"></i> Send</button>
+			</form>
 		</div>		
 		{% endif %}
 		Yours,
@@ -46,14 +46,15 @@
 </div>
 
 <div class="row-fluid">
-	<div class="span6 offset3">
-		<div>
-			<div class="progress">
-				<div class="bar bar-danger" id="bar1" style="width: 25%;"></div>
-				<div class="bar bar-warning"  id="bar2" style="width: 25%;"></div>
-				<div class="bar bar-info"  id="bar3" style="width: 25%;"></div>
-				<div class="bar bar-success"  id="bar4" style="width: 25%;"></div>
-			</div>
+	<div class="span6 offset3">		
+		<div class="progress">
+			<div class="bar bar-danger" id="bar1" style="width: 25%;"></div>
+			<div class="bar bar-warning"  id="bar2" style="width: 25%;"></div>
+			<div class="bar bar-info"  id="bar3" style="width: 25%;"></div>
+			<div class="bar bar-success"  id="bar4" style="width: 25%;"></div>
+		</div>
+		<div class="progress_text">
+			100%
 		</div>
 	</div>
 </div>
