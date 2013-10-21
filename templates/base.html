@@ -90,8 +90,8 @@
        <li><a href="http://www.heroku.com/">Heroku</a></li>
        <li><a href="http://www.mongolab.com/">MongoLab</a></li>
        <br>
-       {% if session['session_id'] %}
-       ID: {{ session['session_id'] }}
+       {% if session['user_id'] %}
+       ID: {{ session['user_id'] }}
        {% endif %}
      </ul>
    </footer>

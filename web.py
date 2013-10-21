@@ -59,14 +59,16 @@ if app.debug:
 	print " * Running in debug mode"
 	from mockdb import groups, questions, answers, users
 else:
+	print " * Running in prod mode"
 	app.config['MONGO_DBNAME'] = db_name_from_uri(app.config['MONGO_URI'])
 	mongo = PyMongo(app)
 	if mongo:
-		print " * Connection to database established"
-		groups = mongo.db.groups
-		questions = mongo.db.questions
-		answers = mongo.db.answers
-		users = mongo.db.users
+		with app.app_context():
+			print " * Connection to database established"
+			groups = mongo.db.groups
+			questions = mongo.db.questions
+			answers = mongo.db.answers
+			users = mongo.db.users
 
 app.permanent_session_lifetime = timedelta(days=3)
 app.config['num_groups'] = groups.count()
@@ -132,9 +134,12 @@ def personal():
 def email():
 	u = users.find_one({'_id':ObjectId(session['user_id'])})
 	if u:
+		print "Found user", session['user_id']
 		u['email'] = request.form['email']
+		users.save(u)
 		return jsonify(result=True,email=request.form['email'])
 	else:
+		print "Couldn't find user", session['user_id']
 		return jsonify(result=False)
 
 @app.route('/admin', methods=['GET','POST'])
@@ -159,7 +164,7 @@ def logout():
 @login_required
 def view_groups():
 	if request.is_xhr or 'json' in request.args:
-		return jsonify(result=groups.find())
+		return jsonify(result=list(groups.find()))
 	else:
 		return render_template("groups.html")
 
@@ -173,7 +178,7 @@ def view_questions(group=''):
 			qs = questions.find({'group':group})	
 		else:
 			qs = questions.find()
-		return jsonify(result=qs)
+		return jsonify(result=list(qs))
 	else:
 		return render_template("questions.html",group=group)
 
@@ -183,8 +188,10 @@ def view_users():
 	if request.is_xhr:
 		return abort(404)
 	if 'json' in request.args:
-		return jsonify(result=users.find())
-	return render_template("users.html", users=users.find())
+		return jsonify(result=list(users.find()))		
+	cur = users.find({ 'email': { '$exists': True } }, fields={'email'})
+	emails = [u['email'] for u in cur]
+	return render_template("users.html", emails=emails, users=users.find())
 
 @app.route('/admin/answers')
 @login_required
@@ -192,7 +199,7 @@ def view_answers():
 	if request.is_xhr:
 		return abort(404)
 	if 'json' in request.args:
-		return jsonify(result=answers.find())
+		return jsonify(result=list(answers.find()))
 	return render_template("answers.html", answers=answers.find())
 
 def try_int(value):
@@ -277,5 +284,5 @@ def reorder_cursor(cursor, collection):
 
 if __name__ == '__main__':	
 	port = int(os.environ.get('PORT', 5005))
-	app.run(host='0.0.0.0', port=port, debug=app.debug)	
+	app.run(host='0.0.0.0', port=port, app.debug)	
 	print "Finished"
