@@ -37,3 +37,9 @@ nosetests.xml
 
 # virtualenv
 venv
+
+# configuration
+.env
+
+# log
+log
