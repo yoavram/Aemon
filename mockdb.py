@@ -31,6 +31,12 @@ class MockDb:
 				return True
 		return False
 
+	def save(self, post):
+		if self.update(post):
+			return post['_id']
+		else:
+			return self.insert(post)
+
 	def find(self, spec=None, sort=None):
 		if spec:
 			cursor = MockList([])
