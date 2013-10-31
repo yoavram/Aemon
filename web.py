@@ -129,7 +129,7 @@ def finish():
 def personal():
 	data = request.form.copy()
 	print "User:", data
-	uid = users.insert(data)	
+	uid = users.save(data)
 	print "UID:", uid
 	json_o = jsonify(result=uid)
 	print "json:", json_o
