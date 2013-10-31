@@ -6,13 +6,13 @@
 	<div class="control-group">
 		<label class="control-label" for="age">Age</label>
 		<div class="controls">
-			<input class="input-mini" type="text" name="age">
+			<input class="input-mini" type="number" name="age" required>
 		</div>
 	</div>
 	<div class="control-group">
 		<label class="control-label" for="country">Country</label>
 		<div class="controls">		
-			<select class="dropdown" name="country"> 
+			<select class="dropdown" name="country" required> 
 				<option value="" selected="selected">Select Country</option> 
 				{% include "countries.html" %}
 			</select>
@@ -22,7 +22,7 @@
 		<label class="control-label" for="bornInThisCountry">Country of birth</label>
 		<div class="controls">
 			<label class="radio">
-				<input type="radio" name="bornInThisCountry" value="yes">
+				<input type="radio" name="bornInThisCountry" value="yes" required>
 				Yes
 			</label>
 			<label class="radio">
@@ -35,7 +35,7 @@
 		<label class="control-label" for="citizenInThisCountry">Country of citizenship</label>
 		<div class="controls">
 			<label class="radio">
-				<input type="radio" name="citizenInThisCountry" value="yes">
+				<input type="radio" name="citizenInThisCountry" value="yes" required>
 				Yes
 			</label>
 			<label class="radio">
@@ -49,7 +49,7 @@
 		<label class="control-label" for="gender">Gender</label>
 		<div class="controls">
 					<label class="radio">
-				<input type="radio" name="gender" value="male">
+				<input type="radio" name="gender" value="male" required>
 				Male
 			</label>
 			<label class="radio">
@@ -61,7 +61,7 @@
 	<div class="control-group">
 		<label class="control-label" for="education">Field of education</label>
 		<div class="controls">
-			<select class="dropdown" name="education">	
+			<select class="dropdown" name="education" required>	
 				<option value="" selected="selected">Select field</option> 
 				{% include "fields.html" %}	
 			</select>
@@ -70,7 +70,7 @@
 	<div class="control-group">
 		<label class="control-label" for="affiliation">Affiliation</label>
 		<div class="controls">
-			<input type="text" name="affiliation" placeholder="Faculty and department">
+			<input type="text" name="affiliation" placeholder="Faculty and department" required>
 		</div>
 	</div>	
 	<div class="control-group">
