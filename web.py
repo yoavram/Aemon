@@ -39,6 +39,7 @@ def short_string_from_datetime(datetime_obj):
 
 # add environment variables using 'heroku config:add VARIABLE_NAME=variable_name'
 DEBUG = os.environ.get('DEBUG', 'True') == 'True'
+PROPAGATE_EXCEPTIONS = os.environ.get('PROPAGATE_EXCEPTIONS', 'True') == 'True'
 MONGO_URI = os.environ.get('MONGOLAB_URI')
 GOOGLE_ANALYTICS = os.environ.get('GOOGLE_ANALYTICS', '')
 SECRET = os.environ.get('SECRET', 'A0ZXHH!jmN]LWX/,?Rr98j/3yX R~T')
