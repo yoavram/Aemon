@@ -127,8 +127,12 @@ def finish():
 @app.route('/personal', methods=['POST'])
 def personal():
 	data = request.form.copy()
+	print "User:", data
 	uid = users.insert(data)	
-	return jsonify(result=uid)
+	print "UID:", uid
+	json_o = jsonify(result=uid)
+	print "json:", json_o
+	return json_o
 
 @app.route('/email', methods=['POST'])
 def email():
