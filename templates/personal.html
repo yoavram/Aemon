@@ -6,48 +6,64 @@
 	<div class="control-group">
 		<label class="control-label" for="age">Age</label>
 		<div class="controls">
-			<input type="text" name="age">
+			<input class="input-mini" type="text" name="age">
 		</div>
 	</div>
 	<div class="control-group">
 		<label class="control-label" for="country">Country</label>
 		<div class="controls">		
 			<select class="dropdown" name="country"> 
-			<option value="" selected="selected">Select Country</option> 
-			{% include "countries.html" %}
+				<option value="" selected="selected">Select Country</option> 
+				{% include "countries.html" %}
 			</select>
 		</div>
 	</div>
 	<div class="control-group">
+		<label class="control-label" for="bornInThisCountry">Country of birth</label>
 		<div class="controls">
-		<label class="radio" for="bornInThisCountry">Country of birth?
-		
-			<input type="radio" name="bornInThisCountry" value="yes"> Yes 
-			<input type="radio" name="bornInThisCountry" value="no"> No					
-		
-		</label>
-		</div>
+			<label class="radio">
+				<input type="radio" name="bornInThisCountry" value="yes">
+				Yes
+			</label>
+			<label class="radio">
+				<input type="radio" name="bornInThisCountry" value="no">
+				No
+			</label>
+		</div>		
 	</div>
 	<div class="control-group">
-		<label class="control-label" for="citizenInThisCountry">Country of citizenship?</label>
+		<label class="control-label" for="citizenInThisCountry">Country of citizenship</label>
 		<div class="controls">
-			<input type="radio" name="citizenInThisCountry" value="yes"> Yes 
-			<input type="radio" name="citizenInThisCountry" value="no"> No
+			<label class="radio">
+				<input type="radio" name="citizenInThisCountry" value="yes">
+				Yes
+			</label>
+			<label class="radio">
+				<input type="radio" name="citizenInThisCountry" value="no">
+				No
+			</label>
+			
 		</div>
 	</div>
 	<div class="control-group">
 		<label class="control-label" for="gender">Gender</label>
 		<div class="controls">
-			<input type="radio" name="gender" value="male"> Male 
-			<input type="radio" name="gender" value="female"> Female					
+					<label class="radio">
+				<input type="radio" name="gender" value="male">
+				Male
+			</label>
+			<label class="radio">
+				<input type="radio" name="gender" value="female">
+				Female
+			</label>			
 		</div>
 	</div>
 	<div class="control-group">
 		<label class="control-label" for="education">Field of education</label>
 		<div class="controls">
 			<select class="dropdown" name="education">	
-			<option value="" selected="selected">Select field</option> 
-			{% include "fields.html" %}	
+				<option value="" selected="selected">Select field</option> 
+				{% include "fields.html" %}	
 			</select>
 		</div>
 	</div>
