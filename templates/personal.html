@@ -11,21 +11,25 @@
 	</div>
 	<div class="control-group">
 		<label class="control-label" for="country">Country</label>
-		<div class="controls">
-			<!--input type="text" name="country" placeholder="Where do you work?"-->
+		<div class="controls">		
+			<select class="dropdown" name="country"> 
+			<option value="" selected="selected">Select Country</option> 
 			{% include "countries.html" %}
-
+			</select>
 		</div>
 	</div>
 	<div class="control-group">
-		<label class="control-label" for="bornInThisCountry">Where you born in this country?</label>
 		<div class="controls">
+		<label class="radio" for="bornInThisCountry">Country of birth?
+		
 			<input type="radio" name="bornInThisCountry" value="yes"> Yes 
 			<input type="radio" name="bornInThisCountry" value="no"> No					
+		
+		</label>
 		</div>
 	</div>
 	<div class="control-group">
-		<label class="control-label" for="citizenInThisCountry">Are you a citizen of this country?</label>
+		<label class="control-label" for="citizenInThisCountry">Country of citizenship?</label>
 		<div class="controls">
 			<input type="radio" name="citizenInThisCountry" value="yes"> Yes 
 			<input type="radio" name="citizenInThisCountry" value="no"> No
@@ -41,34 +45,9 @@
 	<div class="control-group">
 		<label class="control-label" for="education">Field of education</label>
 		<div class="controls">
-			<!--input type="text" name="education" placeholder="Chemistry"-->
-			<select class="dropdown" name="education">
-				<option value="">Please Select...</option>
-				<option value="1">Arts and Literature</option>
-				<option value="2">Astronomy / Astrophysics / Space Science</option>
-				<option value="3">Biological Sciences</option>
-				<option value="4">Business Administration</option>
-				<option value="5">Chemistry</option>
-				<option value="6">Computer and Information Science</option>
-				<option value="25">Design</option>
-				<option value="7">Earth Sciences</option>
-				<option value="8">Economics</option>
-				<option value="9">Education</option>
-				<option value="10">Electrical and Electronic Engineering</option>
-				<option value="11">Engineering</option>
-				<option value="12">Environmental Sciences</option>
-				<option value="13">Humanities</option>
-				<option value="14">Law</option>
-				<option value="15">Linguistics</option>
-				<option value="16">Management Science / Operations Research</option>
-				<option value="17">Materials Science</option>
-				<option value="18">Mathematics</option>
-				<option value="19">Medicine</option>
-				<option value="20">Philosophy</option>
-				<option value="21">Physics</option>
-				<option value="22">Psychology</option>
-				<option value="23">Social Sciences</option>
-				<option value="24">Sports and Recreation</option>
+			<select class="dropdown" name="education">	
+			<option value="" selected="selected">Select field</option> 
+			{% include "fields.html" %}	
 			</select>
 		</div>
 	</div>
@@ -81,7 +60,7 @@
 	<div class="control-group">
 		<label class="control-label" for="research">Field of research (opt.)</label>
 		<div class="controls">
-			<input type="text" name="research" placeholder="Molecular biology">
+			<input type="text" name="research" placeholder="What do you work on?">
 		</div>
 	</div>
 	<div class="control-group">
